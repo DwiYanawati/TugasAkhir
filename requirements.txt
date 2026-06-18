@@ -1,0 +1,8 @@
+streamlit
+streamlit-webrtc
+opencv-python-headless
+pillow
+ultralytics
+numpy
+av
+tornado==6.3.3
