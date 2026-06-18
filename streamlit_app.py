@@ -6,63 +6,104 @@ import os
 from ultralytics import YOLO
 from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, RTCConfiguration
 
-# 1. SET CONFIG UTAMA (Aesthetic setup)
+# 1. SET CONFIG UTAMA (Aesthetic setup - Wide Mode)
 st.set_page_config(
     page_title="SoyLeaf-Guard | Deteksi Penyakit Kedelai",
     page_icon="🌱",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed" # Menyembunyikan sidebar bawaan secara default
 )
 
-# 2. SUNTIKAN CSS UNTUK TAMPILAN MODERN & INTERAKTIF
+# 2. SUNTIKAN CSS PREMIUM (Menghilangkan Sidebar & Merombak Tab Menjadi Navbar Atas)
 st.markdown("""
     <style>
-    /* Global Styles */
+    /* Global Background */
     .stApp {
-        background-color: #F8F9FA;
+        background-color: #F4F7F5;
         font-family: 'Inter', sans-serif;
     }
     
-    /* Mempercantik Sidebar */
-    [data-testid="stSidebar"] {
-        background-color: #E8F5E9;
-        border-right: 1px solid #C8E6C9;
+    /* MENYEMBUNYIKAN SIDEBAR TOTAL (Tombol panah kiri atas dihilangkan) */
+    [data-testid="collapsedControl"] {
+        display: none !important;
     }
-    [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {
-        color: #1B5E20 !important;
-        font-weight: 700;
+    
+    /* REKAYASA GAYA TAB MENJADI NAVBAR PREMIUM */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 15px;
+        background-color: #FFFFFF;
+        padding: 12px 20px;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        border: 1px solid #E3EAE4;
+        justify-content: center; /* Membuat menu berada tepat di tengah halaman */
+        margin-bottom: 30px;
+    }
+    
+    /* Mengubah Tampilan Tombol Tab */
+    .stTabs [data-baseweb="tab"] {
+        height: 50px;
+        white-space: pre-wrap;
+        background-color: #F0F4F1;
+        border-radius: 10px;
+        color: #4A5D4E;
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 0px 25px;
+        transition: all 0.3s ease;
+        border: none !important;
+    }
+    
+    /* Efek Saat Tab Disorot (Hover) */
+    .stTabs [data-baseweb="tab"]:hover {
+        background-color: #C8E6C9;
+        color: #1B5E20;
+        transform: translateY(-2px);
+    }
+    
+    /* Efek Saat Tab Aktif Terpilih */
+    .stTabs [aria-selected="true"] {
+        background-color: #2E7D32 !important;
+        color: #FFFFFF !important;
+        box-shadow: 0 4px 12px rgba(46, 125, 50, 0.25);
+    }
+    
+    /* Garis bawah bawaan tab dihilangkan */
+    .stTabs [data-baseweb="tab-border"] {
+        display: none !important;
     }
     
     /* Desain Kartu Kontainer (Card Layout) */
     .custom-card {
         background: white;
-        padding: 24px;
-        border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-        border: 1px solid #E0E0E0;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.03);
+        border: 1px solid #EAEAEA;
         margin-bottom: 25px;
     }
     
-    /* Judul Utama */
-    .main-title {
+    /* Tipografi Judul */
+    .hero-title {
         color: #1B5E20;
         font-weight: 800;
-        font-size: 2.6rem;
+        font-size: 3rem;
+        text-align: center;
         margin-bottom: 0px;
-        padding-top: 10px;
     }
-    .sub-title {
-        color: #555555;
-        font-size: 1.1rem;
-        margin-bottom: 25px;
+    .hero-sub {
+        color: #556B58;
+        font-size: 1.2rem;
+        text-align: center;
+        margin-bottom: 35px;
     }
     
-    /* Tombol Utama yang Interaktif */
+    /* Tombol Unggah & Deteksi */
     div.stButton > button:first-child {
         background-color: #2E7D32 !important;
         color: white !important;
         border-radius: 12px !important;
-        padding: 12px 24px !important;
+        padding: 14px 28px !important;
         font-weight: 600 !important;
         border: none !important;
         transition: all 0.3s ease !important;
@@ -75,107 +116,88 @@ st.markdown("""
         transform: translateY(-2px);
     }
     
-    /* Badge Hasil Deteksi yang Modern */
+    /* Hasil Badge */
     .detection-badge {
-        background-color: #E8F5E9;
-        border-left: 5px solid #2E7D32;
-        padding: 12px 18px;
-        border-radius: 8px;
-        margin-bottom: 10px;
+        background-color: #F1F8F2;
+        border-left: 6px solid #2E7D32;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 12px;
         font-weight: 600;
         color: #1B5E20;
-    }
-    .no-detection-badge {
-        background-color: #FFF3E0;
-        border-left: 5px solid #FF9800;
-        padding: 12px 18px;
-        border-radius: 8px;
-        font-weight: 600;
-        color: #E65100;
+        font-size: 1.05rem;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# 3. HEADER UTAMA
-st.markdown('<h1 class="main-title">🌱 SoyLeaf-Guard</h1>', unsafe_allow_html=True)
-st.markdown('<p class="sub-title">Sistem Cerdas Deteksi Dini Penyakit Daun Kedelai Berbasis <b>YOLOv9</b></p>', unsafe_allow_html=True)
+# 3. HERO SECTION (Header Atas Tengah)
+st.markdown('<h1 class="hero-title">🌱 SoyLeaf-Guard</h1>', unsafe_allow_html=True)
+st.markdown('<p class="hero-sub">Sistem Komputasi Cerdas Identifikasi Penyakit Daun Kedelai Berbasis <b>YOLOv9</b></p>', unsafe_allow_html=True)
 
-# 4. LOAD MODEL DENGAN CACHING
+# 4. MEMBUAT TABS HORIZONTAL DI TENGAH SEBAGAI PENGGANTI SIDEBAR
+menu_tab1, menu_tab2, menu_tab3 = st.tabs([
+    "📤  Upload File Citra", 
+    "🎥  Kamera Real-Time", 
+    "ℹ️  Informasi Sistem & Parameter"
+])
+
+# 5. LOAD MODEL DENGAN CACHING (Logika Utama Anda)
 @st.cache_resource
 def load_model():
     try:
         model = YOLO("best.pt")
         return model
     except Exception as e:
-        st.error(f"Error loading model: {e}")
         return None
 
-with st.spinner("Menginisialisasi Arsitektur YOLOv9..."):
-    model = load_model()
+model = load_model()
 
-# Konfigurasi WebRTC STUN Server (Agar kamera jalan di server cloud online)
+# Konfigurasi WebRTC STUN Server
 RTC_CONFIGURATION = RTCConfiguration(
     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
 )
 
-# Class Transformer untuk memproses Video Frame demi Frame secara Real-Time
 class YoloVideoTransformer(VideoTransformerBase):
     def __init__(self):
         self.model = model
-
     def transform(self, frame):
         img = frame.to_ndarray(format="bgr24")
-        
-        # Proses deteksi frame lewat YOLOv9
-        results = self.model(img, conf=0.25) # Nilai thresholds bisa disesuaikan
-        annotated_frame = results[0].plot()
-        
-        return annotated_frame
+        results = self.model(img, conf=0.25)
+        return results[0].plot()
 
-# 5. SIDEBAR MENU (Sekarang ada 3 Pilihan Menu Sesuai Skripsi!)
-with st.sidebar:
-    st.header("📌 Menu Navigasi")
-    menu = st.radio(
-        "Pilih Mode Aplikasi:", 
-        ["📤 Upload Gambar", "🎥 Kamera Real-Time", "ℹ️ Informasi Sistem"], 
-        index=0
-    )
-    
-    st.markdown("---")
-    st.subheader("💡 Panduan Pengguna")
-    if menu == "📤 Upload Gambar":
-        st.info("Unggah foto daun kedelai (.jpg/.png), lalu klik tombol '🔍 Deteksi Penyakit'.")
-    elif menu == "🎥 Kamera Real-Time":
-        st.info("Klik tombol 'START' untuk mengaktifkan kamera perangkat. Dekatkan daun kedelai ke arah lensa kamera.")
-    else:
-        st.info("Halaman ini memuat informasi parameter komputasi data penelitian.")
 
 if model is not None:
-    st.sidebar.success("✅ Model YOLOv9 Berhasil Dimuat!")
     
-    # ==================== MODE 1: UPLOAD GAMBAR ====================
-    if menu == "📤 Upload Gambar":
+    # ==================== HALAMAN TAB 1: UPLOAD GAMBAR ====================
+    with menu_tab1:
         st.markdown('<div class="custom-card">', unsafe_allow_html=True)
-        st.subheader("📤 Panel Unggah Citra Daun")
+        st.subheader("📁 Unggah Gambar Daun Kedelai")
         uploaded_file = st.file_uploader(
-            "Pilih file gambar dengan format JPG, JPEG, atau PNG:", 
-            type=["jpg", "jpeg", "png"]
+            "Seret atau pilih file gambar (.jpg, .jpeg, .png):", 
+            type=["jpg", "jpeg", "png"],
+            label_visibility="collapsed" # Menyembunyikan teks label bawaan agar clean
         )
         st.markdown('</div>', unsafe_allow_html=True)
         
         if uploaded_file is not None:
             image = Image.open(uploaded_file)
+            
+            # Membagi layout visualisasi gambar dengan proporsi kolom seimbang
             col1, col2 = st.columns(2, gap="large")
             
             with col1:
                 st.markdown('<div class="custom-card">', unsafe_allow_html=True)
-                st.subheader("📷 Gambar Asli")
+                st.subheader("📷 Gambar Asli Pengguna")
                 st.image(image, use_container_width=True)
                 st.markdown('</div>', unsafe_allow_html=True)
-                btn_trigger = st.button("🔍 Deteksi Penyakit")
+                
+                btn_trigger = st.button("🚀 Mulai Analisis Deteksi")
             
-            if btn_trigger:
-                with st.spinner("Model sedang mendeteksi karakteristik visual daun..."):
+            with col2:
+                st.markdown('<div class="custom-card">', unsafe_allow_html=True)
+                st.subheader("🎯 Hasil Lokalisasi Objek (YOLOv9s)")
+                
+                if btn_trigger:
                     img_array = np.array(image)
                     img_bgr = cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR)
                     
@@ -183,92 +205,91 @@ if model is not None:
                     result_img = results[0].plot()
                     result_img_rgb = cv2.cvtColor(result_img, cv2.COLOR_BGR2RGB)
                     
-                    with col2:
-                        st.markdown('<div class="custom-card">', unsafe_allow_html=True)
-                        st.subheader("🎯 Hasil Analisis Sistem")
-                        st.image(result_img_rgb, use_container_width=True)
-                        st.markdown('</div>', unsafe_allow_html=True)
-                    
-                    st.markdown('<div class="custom-card">', unsafe_allow_html=True)
-                    st.subheader("📊 Detail Objek Terdeteksi (Instance-level)")
-                    
-                    if len(results[0].boxes) > 0:
-                        for i, box in enumerate(results[0].boxes):
-                            class_id = int(box.cls[0])
-                            class_name = results[0].names[class_id]
-                            confidence = float(box.conf[0])
-                            st.markdown(
-                                f'<div class="detection-badge">Objek #{i+1} : {class_name} — Confidence Score: {(confidence*100):.2f}%</div>', 
-                                unsafe_allow_html=True
-                            )
-                    else:
+                    st.image(result_img_rgb, use_container_width=True)
+                else:
+                    st.info("Menunggu perintah analisis... Silakan tekan tombol hijau di bawah Gambar Asli.")
+                st.markdown('</div>', unsafe_allow_html=True)
+            
+            if btn_trigger:
+                # Panel Detail Karakteristik Penyakit
+                st.markdown('<div class="custom-card">', unsafe_allow_html=True)
+                st.subheader("📊 Analisis Tingkat Keparahan & Klasifikasi")
+                
+                if len(results[0].boxes) > 0:
+                    for i, box in enumerate(results[0].boxes):
+                        class_id = int(box.cls[0])
+                        class_name = results[0].names[class_id]
+                        confidence = float(box.conf[0])
                         st.markdown(
-                            '<div class="no-detection-badge">⚠️ Sistem Tidak Mendeteksi Adanya Gejala Penyakit (Daun Sehat/Objek Tidak Dikenali)</div>', 
+                            f'<div class="detection-badge">Klasifikasi #{i+1} : <b>{class_name}</b> — Tingkat Kepercayaan (Confidence): <b>{(confidence*100):.2f}%</b></div>', 
                             unsafe_allow_html=True
                         )
-                    st.markdown('</div>', unsafe_allow_html=True)
-            else:
-                with col2:
-                    st.markdown('<div class="custom-card">', unsafe_allow_html=True)
-                    st.subheader("🎯 Hasil Analisis Sistem")
-                    st.info("Silakan klik tombol 'Deteksi Penyakit' untuk melihat hasil.")
-                    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # ==================== MODE 2: KAMERA REAL-TIME (SUDAH ADA!) ====================
-    elif menu == "🎥 Kamera Real-Time":
-        st.markdown('<div class="custom-card">', unsafe_allow_html=True)
-        st.subheader("🎥 Deteksi Real-Time via WebRTC")
-        st.write("Fitur ini menggunakan kamera perangkat Anda untuk melakukan inferensi secara langsung (*on-the-fly*).")
+                else:
+                    st.warning("Model tidak mendeteksi adanya bercak kelainan penyakit visual pada sampel daun ini.")
+                st.markdown('</div>', unsafe_allow_html=True)
+
+    # ==================== HALAMAN TAB 2: KAMERA REAL-TIME ====================
+    with menu_tab2:
+        col_cam1, col_cam2 = st.columns([2, 1], gap="large")
         
-        # Integrasi komponen streaming video WebRTC Streamlit
-        webrtc_streamer(
-            key="yolov9-detection",
-            video_transformer_factory=YoloVideoTransformer,
-            rtc_configuration=RTC_CONFIGURATION,
-            media_stream_constraints={"video": True, "audio": False}
-        )
+        with col_cam1:
+            st.markdown('<div class="custom-card">', unsafe_allow_html=True)
+            st.subheader("🎥 Pengambilan Citra Berbasis Streaming WebRTC")
+            st.write("Arahkan kamera perangkat langsung ke sampel daun kedelai untuk analisis otomatis.")
+            
+            webrtc_streamer(
+                key="yolov9-navbar-detection",
+                video_transformer_factory=YoloVideoTransformer,
+                rtc_configuration=RTC_CONFIGURATION,
+                media_stream_constraints={"video": True, "audio": False}
+            )
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+        with col_cam2:
+            st.markdown('<div class="custom-card">', unsafe_allow_html=True)
+            st.subheader("💡 Petunjuk Lapangan")
+            st.caption("""
+            - Pastikan izin akses kamera pada browser sudah disetujui (*Allow*).
+            - Jaga stabilitas jarak kamera dengan objek daun sekitar 15-30 cm.
+            - Fluktuasi nilai kestabilan deteksi real-time dipengaruhi oleh intensitas cahaya matahari dan *motion blur*.
+            """)
+            st.markdown('</div>', unsafe_allow_html=True)
+
+    # ==================== HALAMAN TAB 3: INFORMASI SISTEM ====================
+    with menu_tab3:
+        st.markdown('<div class="custom-card">', unsafe_allow_html=True)
+        st.subheader("📊 Parameter Evaluasi Akhir Penelitian")
+        
+        col_m1, col_m2, col_m3 = st.columns(3)
+        with col_m1:
+            st.metric("Akurasi Model (mAP50)", "97.8%", "Sangat Unggul")
+        with col_m2:
+            st.metric("Total Dataset", "3.600 Citra", "Setelah Augmentasi")
+        with col_m3:
+            st.metric("Kecepatan Komputasi", "15-30 FPS", "Real-Time Tracking")
         st.markdown('</div>', unsafe_allow_html=True)
         
         st.markdown('<div class="custom-card">', unsafe_allow_html=True)
-        st.caption("**Catatan Teknis Lapangan:** Deteksi mode *real-time* memiliki fluktuasi *confidence score* (rata-rata 65%) akibat faktor pergerakan (*motion blur*), *frame rate* kamera, dan pencahayaan alami di area lahan pertanian.")
-        st.markdown('</div>', unsafe_allow_html=True)
-        
-    # ==================== MODE 3: INFORMASI SISTEM ====================
-    else:
-        st.markdown('<div class="custom-card">', unsafe_allow_html=True)
-        st.subheader("ℹ️ Spesifikasi Teknis & Informasi Sistem")
-        
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Arsitektur Model", "YOLOv9s", "Object Detection")
-        with col2:
-            st.metric("Framework Web", "Streamlit Cloud", "Python-based")
-        with col3:
-            st.metric("Metode Deteksi", "Upload & WebRTC", "Otomatis")
-        st.markdown('</div>', unsafe_allow_html=True)
-        
-        st.markdown('<div class="custom-card">', unsafe_allow_html=True)
-        st.subheader("🔬 Tentang Penelitian")
+        st.subheader("🔬 Ringkasan Metodologi Komputasi")
         st.write("""
-        Aplikasi ini dikembangkan untuk mendeteksi 4 jenis penyakit utama pada daun tanaman kedelai 
-        (*Karat Daun, Pustul Bakteri, Embun Bulu, Bercak Target*) serta mampu mengidentifikasi kondisi daun sehat sebagai pembanding.
+        Aplikasi ini merupakan bagian akhir dari implementasi Tugas Akhir Statistika UII yang mengintegrasikan model deep learning **YOLOv9s** ke dalam arsitektur sistem berbasis web.
         
-        **Karakteristik Pelatihan Model:**
-        - **Dataset Awal:** 1.500 citra (dikembangkan menjadi 3.600 citra melalui metode augmentasi).
-        - **Konfigurasi:** 30 *Epoch*, *Imgsize* 640, *Batch size* 16.
-        - **Validasi Kestabilan:** *5-Fold Cross Validation*.
+        **Spesifikasi Teknis:**
+        - **Model Back-end:** Ultralytics YOLOv9s (`best.pt`)
+        - **Arsitektur Validasi:** *5-Fold Cross Validation & Retraining*
+        - **Kelas Target:** *Karat Daun, Pustul Bakteri, Embun Bulu, Bercak Target,* dan *Daun Sehat*.
         """)
         st.markdown('</div>', unsafe_allow_html=True)
 
 else:
-    st.error("❌ Gagal memuat model. Pastikan file 'best.pt' berada pada direktori repositori aplikasi Anda.")
+    st.error("Gagal memuat arsitektur model 'best.pt'. Periksa repositori Anda.")
 
-# 6. FOOTER HALAMAN
+# 6. FOOTER PREMIUM
 st.markdown(
     """
-    <br><hr>
-    <p style='text-align: center; color: #777777; font-size: 0.9rem;'>
-        © 2026 | Aplikasi Deteksi Dini Penyakit Daun Kedelai | Jurusan Statistika FMIPA | Universitas Islam Indonesia
+    <br><br>
+    <p style='text-align: center; color: #888888; font-size: 0.85rem;'>
+        © 2026 | SoyLeaf-Guard Kedelai | Jurusan Statistika FMIPA | Universitas Islam Indonesia
     </p>
     """, 
     unsafe_allow_html=True
