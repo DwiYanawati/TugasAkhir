@@ -6,206 +6,91 @@ import os
 from ultralytics import YOLO
 import time
 
-# Konfigurasi halaman
+# 1. SET CONFIG UTAMA (Taruh ini di baris paling atas setelah import!)
 st.set_page_config(
-    page_title="Deteksi Penyakit Daun Kedelai",
-    page_icon="🌿",
-    layout="wide"
+    page_title="SoyLeaf-Guard | Deteksi Penyakit Kedelai",
+    page_icon="🌱",
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-# Title
-st.title("🌿 Deteksi Penyakit Daun Kedelai")
-st.markdown("Aplikasi deteksi penyakit pada daun kedelai menggunakan **YOLOv9**")
-
-# Sidebar
-with st.sidebar:
-    st.header("Menu")
-    menu = st.radio("Pilih Mode:", ["📤 Upload Gambar", "📷 Kamera Real-time", "ℹ️ Informasi"])
+# 2. SUNTIKAN CSS UNTUK TAMPILAN AESTHETIC
+st.markdown("""
+    <style>
+    /* Mengubah font utama dan background */
+    .stApp {
+        background-color: #F8F9FA;
+        font-family: 'Inter', sans-serif;
+    }
     
-    st.markdown("---")
-    st.subheader("Cara Penggunaan")
-    st.info(
-        """
-        **Upload Gambar:**
-        1. Pilih mode **Upload Gambar**
-        2. Upload foto daun kedelai
-        3. Klik tombol deteksi
-        
-        **Kamera Real-time:**
-        1. Pilih mode **Kamera Real-time**
-        2. Izinkan akses kamera
-        3. Deteksi otomatis berjalan
-        """
-    )
-
-# Load model dengan caching
-@st.cache_resource
-def load_model():
-    try:
-        model = YOLO("best.pt")
-        return model
-    except Exception as e:
-        st.error(f"Error loading model: {e}")
-        return None
-
-# Load model
-with st.spinner("Loading model..."):
-    model = load_model()
-
-if model is not None:
-    st.sidebar.success("✅ Model siap digunakan!")
+    /* Mempercantik Sidebar */
+    [data-testid="stSidebar"] {
+        background-color: #E8F5E9;
+        border-right: 1px solid #C8E6C9;
+    }
     
-    # ============= MODE UPLOAD GAMBAR =============
-    if menu == "📤 Upload Gambar":
-        st.header("📤 Upload Gambar untuk Deteksi")
-        
-        uploaded_file = st.file_uploader(
-            "Pilih gambar daun kedelai...", 
-            type=["jpg", "jpeg", "png"]
-        )
-        
-        if uploaded_file is not None:
-            image = Image.open(uploaded_file)
-            
-            col1, col2 = st.columns(2)
-            with col1:
-                st.subheader("📷 Gambar Asli")
-                st.image(image, use_container_width=True)
-            
-            if st.button("🔍 Deteksi Penyakit", type="primary"):
-                with st.spinner("Menganalisis gambar..."):
-                    img_array = np.array(image)
-                    img_bgr = cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR)
-                    
-                    results = model(img_bgr)
-                    result_img = results[0].plot()
-                    result_img_rgb = cv2.cvtColor(result_img, cv2.COLOR_BGR2RGB)
-                    
-                    with col2:
-                        st.subheader("✅ Hasil Deteksi")
-                        st.image(result_img_rgb, use_container_width=True)
-                    
-                    st.subheader("📊 Detail Deteksi")
-                    if len(results[0].boxes) > 0:
-                        for i, box in enumerate(results[0].boxes):
-                            class_id = int(box.cls[0])
-                            class_name = results[0].names[class_id]
-                            confidence = float(box.conf[0])
-                            st.success(f"{i+1}. {class_name} ({(confidence*100):.1f}%)")
-                    else:
-                        st.warning("Tidak ada penyakit yang terdeteksi")
+    /* Desain Kartu (Card Layout) untuk Informasi & Hasil */
+    .custom-card {
+        background: white;
+        padding: 24px;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        border: 1px solid #E0E0E0;
+        margin-bottom: 20px;
+    }
     
-        # ============= MODE KAMERA REAL-TIME (WEBCAM USER) =============
-    elif menu == "📷 Kamera Real-time":
-        st.header("📷 Deteksi Real-time dengan Kamera")
-        st.markdown("Arahkan kamera ke daun kedelai - **deteksi otomatis berjalan**")
-        
-        # Import library webrtc
-        from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, WebRtcMode
-        import av
-        
-        # Info bar
-        col1, col2 = st.columns(2)
-        with col1:
-            st.info("🎥 Kamera User")
-        with col2:
-            st.info("⚡ Real-time Detection")
-        
-        st.markdown("---")
-        
-        # Class untuk memproses video
-        class VideoProcessor(VideoProcessorBase):
-            def __init__(self):
-                self.model = model
-                self.threshold = 0.5
-            
-            def recv(self, frame):
-                # Konversi frame ke format yang bisa diproses
-                img = frame.to_ndarray(format="bgr24")
-                
-                # Deteksi dengan YOLO
-                if self.model is not None:
-                    results = self.model(img)
-                    img = results[0].plot()
-                
-                # Kembalikan frame yang sudah diproses
-                return av.VideoFrame.from_ndarray(img, format="bgr24")
-        
-        # Konfigurasi WebRTC
-        rtc_config = {
-            "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
-        }
-        
-        # Tampilkan streamer
-        ctx = webrtc_streamer(
-            key="yolo-detection",
-            mode=WebRtcMode.SENDRECV,
-            rtc_configuration=rtc_config,
-            video_processor_factory=VideoProcessor,
-            media_stream_constraints={"video": True, "audio": False},
-            async_processing=True,
-        )
-        
-        if ctx.video_processor:
-            ctx.video_processor.model = model
-        
-        st.markdown("---")
-        st.caption("💡 Klik 'START' untuk mengaktifkan kamera. Izinkan akses kamera di browser Anda.")
-        
-    # ============= MODE INFORMASI =============
-    else:  # menu == "ℹ️ Informasi"
-        st.header("ℹ️ Informasi Sistem")
-        
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Model", "YOLOv9", "Object Detection")
-        with col2:
-            st.metric("Framework", "Streamlit", "Web App")
-        with col3:
-            st.metric("Fitur", "Upload & Kamera", "Real-time")
-        
-        st.markdown("---")
-        
-        # TABS untuk Informasi
-        tab1, tab2 = st.tabs(["Tentang Aplikasi", "Cara Kerja"])
-        
-        with tab1:
-            st.subheader("Tentang Aplikasi")
-            st.write("""
-            Aplikasi ini digunakan untuk mendeteksi penyakit daun kedelai secara otomatis menggunakan model YOLOv9 berbasis deep learning.
-            Model dilatih menggunakan dataset citra penyakit daun kedelai melalui framework Ultralytics, sehingga mampu melakukan deteksi secara cepat dan akurat.
-            Fitur yang tersedia meliputi upload gambar dan deteksi real-time menggunakan kamera. 
-            """)
-        
-        with tab2:
-            st.subheader("Cara Kerja")
-            
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                st.markdown("**📤 Upload Gambar:**")
-                st.write("""
-                1. Pengguna mengunggah gambar daun kedelai
-                2. Sistem memproses gambar menggunakan model YOLOv9
-                3. Model mendeteksi area yang terindikasi penyakit
-                4. Hasil deteksi ditampilkan dalam bentuk bounding box dan label kelas
-                """)
-            
-            with col2:
-                st.markdown("**📷 Kamera Real-time:**")
-                st.write("""
-                1. Pengguna mengaktifkan kamera melalui browser
-                2. Setiap frame video diproses secara real-time
-                3. Model YOLOv9 melakukan deteksi objek pada setiap frame
-                4. Hasil deteksi ditampilkan langsung pada video dengan bounding box
-                """)
+    /* Judul Utama yang Eye-catching */
+    .main-title {
+        color: #1B5E20;
+        font-weight: 800;
+        font-size: 2.5rem;
+        margin-bottom: 5px;
+    }
+    .sub-title {
+        color: #666666;
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+    }
+    
+    /* Desain Tombol Deteksi yang Modern */
+    div.stButton > button:first-child {
+        background-color: #2E7D32;
+        color: white;
+        border-radius: 12px;
+        padding: 10px 24px;
+        font-weight: 600;
+        border: none;
+        transition: all 0.3s ease;
+        width: 100%;
+        box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
+    }
+    div.stButton > button:first-child:hover {
+        background-color: #1B5E20;
+        box-shadow: 0 6px 15px rgba(46, 125, 50, 0.3);
+        transform: translateY(-2px);
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-# Footer
-st.markdown("---")
-st.markdown(
-    "<center>© 2026 | Deteksi Penyakit Daun Kedelai | Universitas Islam Indonesia</center>",
-    unsafe_allow_html=True
-)
+# 3. CONTOH IMPLEMENTASI STRUKTUR HALAMAN UTAMA
+st.markdown('<h1 class="main-title">🌱 SoyLeaf-Guard</h1>', unsafe_allow_html=True)
+st.markdown('<p class="sub-title">Sistem Cerdas Identifikasi Dini Penyakit Tanaman Kedelai (YOLOv9s)</p>', unsafe_allow_html=True)
 
+# Contoh membagi Layout jadi 2 kolom seimbang (Kiri: Input, Kanan: Hasil)
+col1, col2 = st.columns([1, 1], gap="large")
+
+with col1:
+    st.markdown('<div class="custom-card">', unsafe_allow_html=True)
+    st.subheader("📁 Unggah Citra Daun")
+    # File uploader Anda ditaruh di sini
+    uploaded_file = st.file_uploader("Pilih gambar...", type=["jpg", "png", "jpeg"])
+    st.markdown('</div>', unsafe_allow_html=True)
+
+with col2:
+    st.markdown('<div class="custom-card">', unsafe_allow_html=True)
+    st.subheader("📊 Hasil Analisis Model")
+    # Tampilan output visualisasi bounding box ditaruh di sini
+    st.info("Menunggu gambar diunggah untuk memulai inferensi...")
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
