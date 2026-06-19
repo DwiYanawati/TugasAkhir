@@ -14,97 +14,161 @@ st.set_page_config(
     initial_sidebar_state="collapsed" 
 )
 
-# 2. SUNTIKAN CSS PREMIUM (Forest Green Theme)
+# 2. SUNTIKAN CSS PREMIUM (Kombinasi Warna 1F6F5F, 2FA084, 6FCF97)
 st.markdown("""
     <style>
+    /* Background Global Modern */
     .stApp {
-        background-color: #F8FAF9;
+        background-color: #F5F9F7;
         font-family: 'Inter', sans-serif;
     }
     
-    /* Navbar Atas */
+    /* Menyembunyikan Sidebar */
     [data-testid="collapsedControl"] { display: none !important; }
     [data-testid="stSidebar"] { display: none !important; }
     
+    /* Navbar Atas Horizontal */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 15px;
+        gap: 12px;
         background-color: #FFFFFF;
         padding: 10px 20px;
-        border-radius: 12px;
-        box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        border-radius: 14px;
+        box-shadow: 0 4px 20px rgba(31, 111, 95, 0.06);
+        border: 1px solid #E2EFEA;
         justify-content: center;
         margin-bottom: 40px;
     }
     
+    /* Tombol Menu */
     .stTabs [data-baseweb="tab"] {
-        height: 45px;
-        background-color: #F2F6F3;
-        border-radius: 8px;
-        color: #3D4E44;
+        height: 46px;
+        background-color: #EEF5F2;
+        border-radius: 10px;
+        color: #1F6F5F;
         font-weight: 600;
-        padding: 0px 25px;
+        font-size: 0.95rem;
+        padding: 0px 24px;
+        transition: all 0.25s ease;
         border: none !important;
     }
     
+    /* Efek Hover Menu (Menggunakan Warna 6FCF97) */
+    .stTabs [data-baseweb="tab"]:hover {
+        background-color: #6FCF97;
+        color: #1F6F5F;
+        transform: translateY(-1px);
+    }
+    
+    /* Menu Aktif Terpilih (Menggunakan Warna 1F6F5F) */
     .stTabs [aria-selected="true"] {
-        background-color: #0F4C2A !important;
+        background-color: #1F6F5F !important;
         color: #FFFFFF !important;
+        box-shadow: 0 4px 12px rgba(31, 111, 95, 0.2) !important;
     }
 
     .stTabs [data-baseweb="tab-border"] { display: none !important; }
 
-    /* Judul & Teks */
+    /* Gaya Judul Utama */
     .hero-title {
-        color: #0F4C2A;
+        color: #1F6F5F;
         font-weight: 800;
-        font-size: 3rem;
+        font-size: 3.2rem;
         text-align: center;
         margin-top: 10px;
+        margin-bottom: 4px;
     }
     .hero-sub {
-        color: #5A6E62;
-        font-size: 1.2rem;
+        color: #2FA084;
+        font-size: 1.25rem;
         text-align: center;
-        margin-bottom: 40px;
+        margin-bottom: 45px;
+        font-weight: 500;
     }
     
+    /* Subjudul Bagian (Menggunakan Warna 2FA084) */
     .section-header {
-        color: #0F4C2A;
+        color: #2FA084;
         font-weight: 700;
         font-size: 1.6rem;
-        margin-top: 30px;
-        margin-bottom: 15px;
+        margin-top: 35px;
+        margin-bottom: 20px;
+        padding-left: 5px;
     }
 
     .info-text {
-        color: #3D4E44;
+        color: #2F3E3A;
         line-height: 1.7;
         font-size: 1.05rem;
     }
+    .info-text ul {
+        margin-top: 8px;
+        padding-left: 20px;
+    }
+    .info-text li {
+        margin-bottom: 6px;
+    }
 
-    /* Layout Penyakit */
-    .disease-box {
-        margin-bottom: 40px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid #E1EBE5;
+    /* KOTAK TIMBUL DENGAN BAYANGAN HALUS (CARD DISEASES) */
+    .disease-card-box {
+        background-color: #FFFFFF;
+        padding: 24px;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(31, 111, 95, 0.07); /* Efek Timbul Bayangan */
+        border: 1px solid #E2EFEA;
+        border-left: 5px solid #2FA084; /* Aksen warna tepi kiri */
+        margin-bottom: 30px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .disease-card-box:hover {
+        transform: translateY(-3px); /* Efek melayang saat kursor di atas kotak */
+        box-shadow: 0 14px 30px rgba(31, 111, 95, 0.12);
     }
     .disease-title {
-        color: #0F4C2A;
+        color: #1F6F5F;
         font-weight: 700;
-        font-size: 1.3rem;
+        font-size: 1.35rem;
+        margin-bottom: 12px;
+    }
+    
+    /* Tombol Eksekusi Deteksi */
+    div.stButton > button:first-child {
+        background-color: #2FA084 !important;
+        color: white !important;
+        border-radius: 10px !important;
+        padding: 12px 24px !important;
+        font-weight: 600 !important;
+        border: none !important;
+        transition: all 0.2s ease !important;
+        width: 100% !important;
+        box-shadow: 0 4px 12px rgba(47, 160, 132, 0.2) !important;
+    }
+    div.stButton > button:first-child:hover {
+        background-color: #1F6F5F !important;
+        box-shadow: 0 6px 15px rgba(31, 111, 95, 0.3) !important;
+    }
+    
+    /* Badge Hasil */
+    .detection-badge {
+        background-color: #EEF5F2;
+        border-left: 5px solid #2FA084;
+        padding: 14px;
+        border-radius: 8px;
         margin-bottom: 10px;
+        font-weight: 600;
+        color: #1F6F5F;
+        font-size: 1rem;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# 3. NAVBAR
+# 3. DEKLARASI NAVBAR HORIZONTAL ATAS WEBSITE
 tab_home, tab_upload, tab_realtime = st.tabs([
     "Halaman Utama", 
-    "Deteksi via Upload", 
-    "Deteksi Real-Time"
+    "Deteksi via Upload Gambar", 
+    "Deteksi Kamera Real-Time"
 ])
 
-# 4. LOAD MODEL
+# 4. CORE MODEL LOADING WITH CACHING
 @st.cache_resource
 def load_model():
     try:
@@ -115,7 +179,7 @@ def load_model():
 
 model = load_model()
 
-# Config WebRTC
+# Konfigurasi WebRTC STUN Server
 RTC_CONFIGURATION = RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]})
 
 class YoloVideoTransformer(VideoTransformerBase):
@@ -130,89 +194,145 @@ if model is not None:
         st.markdown('<h1 class="hero-title">SoyLeaf-Guard</h1>', unsafe_allow_html=True)
         st.markdown('<p class="hero-sub">Sistem Komputasi Pakar Identifikasi Dini Penyakit Daun Kedelai</p>', unsafe_allow_html=True)
         
-        # Bagian 1: Informasi Sistem
+        # Bagian A: Informasi Sistem
         st.markdown('<div class="section-header">Informasi Sistem</div>', unsafe_allow_html=True)
         st.markdown("""
         <div class="info-text">
         Menu informasi sistem berfungsi untuk memberikan penjelasan kepada pengguna mengenai sistem yang digunakan. 
-        Informasi yang ditampilkan meliputi:
+        Informasi yang ditampilkan pada menu ini meliputi:
         <ul>
-            <li><b>Model yang digunakan:</b> YOLOv9 (You Only Look Once versi 9).</li>
-            <li><b>Framework pengembangan:</b> Streamlit (Python-based web framework).</li>
+            <li><b>Model yang digunakan:</b> YOLOv9.</li>
+            <li><b>Framework pengembangan:</b> Streamlit.</li>
             <li><b>Fitur utama sistem:</b> Deteksi berbasis unggah gambar dan kamera real-time.</li>
             <li><b>Tentang aplikasi:</b> SoyLeaf-Guard dirancang untuk membantu identifikasi penyakit daun kedelai secara instan guna mendukung produktivitas pertanian.</li>
         </ul>
         </div>
         """, unsafe_allow_html=True)
 
-        # Bagian 2: Karakteristik Penyakit (Dengan Gambar)
+        # Bagian B: Karakteristik Penyakit (Kotak Timbul + Link Gambar Lokal)
         st.markdown('<div class="section-header">Karakteristik Visual Penyakit Daun Kedelai</div>', unsafe_allow_html=True)
         
-        # List Penyakit untuk dilooping
+        # Struktur Data Pemanggilan File Gambar Lokal Anda
         diseases = [
             {
                 "title": "1. Karat Daun (Soybean Rust)",
-                "desc": "Disebabkan oleh jamur <i>Phakopsora pachyrhizi</i>. Gejala ditandai dengan bercak pustul kecil berwarna cokelat kelabu atau kemerahan di permukaan bawah daun, menyebabkan daun menguning dan gugur.",
-                "img": "https://pustaka.setjen.pertanian.go.id/media/k2/items/cache/8d94e21a8d8e1d5a7d6e6a1e2f3d4c5b_L.jpg" # Ganti dengan path lokal jika ada
+                "desc": "Disebabkan oleh jamur <i>Phakopsora pachyrhizi</i>. Gejala ditandai dengan bercak pustul kecil berwarna cokelat kelabu atau kemerahan di permukaan bawah daun, menyebabkan daun menguning dan gugur pra-matang.",
+                "filename": "karat.jpg"
             },
             {
                 "title": "2. Pustul Bakteri (Bacterial Pustule)",
-                "desc": "Disebabkan oleh bakteri <i>Xanthomonas axonopodis pv. glycines</i>. Gejala berupa bintik kecil kemerahan yang menonjol (pustul) dan dikelilingi oleh warna kuning (halo).",
-                "img": "https://pest.ceris.purdue.edu/images/pest/soybean_bacterial_pustule.jpg" # Ganti path
+                "desc": "Disebabkan oleh bakteri <i>Xanthomonas axonopodis pv. glycines</i>. Ditandai bintik kecil berwarna kemerahan yang menonjol di bagian tengah, umumnya dikelilingi oleh area kuning (halo) di sekitarnya.",
+                "filename": "pustul.jpg"
             },
             {
                 "title": "3. Embun Bulu (Downy Mildew)",
-                "desc": "Disebabkan oleh cendawan <i>Peronospora manshurica</i>. Menghasilkan bercak hijau pucat di bagian atas daun dan kumpulan bulu halus abu-abu di bagian bawah daun.",
-                "img": "https://cropprotectionnetwork.org/api/v1/images/2237" # Ganti path
+                "desc": "Disebabkan oleh cendawan <i>Peronospora manshurica</i>. Permukaan atas daun menunjukkan bercak hijau pucat atau kuning, sedangkan permukaan bawah daun ditumbuhi kapang halus berwarna abu-abu.",
+                "filename": "embun.jpg"
             },
             {
                 "title": "4. Bercak Target (Target Spot)",
-                "desc": "Disebabkan oleh jamur <i>Corynespora cassiicola</i>. Gejala berupa bercak cokelat melingkar dengan pola lingkaran konsentris menyerupai sasaran tembak.",
-                "img": "https://soybeandiseases.cropsci.illinois.edu/wp-content/uploads/2015/07/Target-spot-leaf-symptoms.jpg" # Ganti path
+                "desc": "Disebabkan oleh jamur <i>Corynespora cassiicola</i>. Gejala berupa bercak cokelat melingkar besar dengan pola lingkaran konsentris berlapis menyerupai sasaran tembak.",
+                "filename": "bercak.jpg"
             },
             {
                 "title": "5. Daun Sehat (Healthy Leaf)",
-                "desc": "Kondisi kontrol dimana daun memiliki warna hijau merata, tekstur mulus, dan tidak menunjukkan adanya bercak atau gejala nekrosis.",
-                "img": "https://img.freepik.com/premium-photo/healthy-soybean-leaf-soy-leaves-field-farm-background_166116-4314.jpg" # Ganti path
+                "desc": "Kondisi daun kontrol pembanding dengan permukaan bersih, pigmen hijau merata, dan bebas dari gejala infeksi patogen maupun serangan mikroorganisme merugikan.",
+                "filename": "sehat.jpg"
             }
         ]
 
+        # Menampilkan per penyakit ke dalam Kotak Timbul berpola Kolom Horizontal
         for d in diseases:
-            col_img, col_txt = st.columns([1, 2])
+            st.markdown('<div class="disease-card-box">', unsafe_allow_html=True)
+            col_img, col_txt = st.columns([1, 2.5], gap="large")
+            
             with col_img:
-                st.image(d['img'], use_container_width=True)
+                # Cek ketersediaan file gambar lokal di folder berkas Anda
+                if os.path.exists(d["filename"]):
+                    st.image(d["filename"], use_container_width=True)
+                else:
+                    # Menampilkan area penampung rapi jika berkas gambar belum dimasukkan ke folder
+                    st.warning(f"File '{d['filename']}' tidak ditemukan di direktori.")
+                    
             with col_txt:
                 st.markdown(f'<div class="disease-title">{d["title"]}</div>', unsafe_allow_html=True)
-                st.markdown(f'<p class="info-text">{d["desc"]}</p>', unsafe_allow_html=True)
-            st.markdown('<div class="disease-box"></div>', unsafe_allow_html=True)
+                st.markdown(f'<p class="info-text" style="margin:0;">{d["desc"]}</p>', unsafe_allow_html=True)
+                
+            st.markdown('</div>', unsafe_allow_html=True)
 
     # ==================== TAB 2: DETEKSI UPLOAD ====================
     with tab_upload:
         st.markdown('<div class="section-header">Deteksi via File Gambar</div>', unsafe_allow_html=True)
-        uploaded_file = st.file_uploader("Pilih gambar daun kedelai:", type=["jpg", "jpeg", "png"])
+        uploaded_file = st.file_uploader("Unggah file gambar daun kedelai:", type=["jpg", "jpeg", "png"])
         
         if uploaded_file is not None:
             image = Image.open(uploaded_file)
-            c1, c2 = st.columns(2)
-            with c1:
+            col1, col2 = st.columns(2, gap="large")
+            
+            with col1:
                 st.subheader("Gambar Asli")
                 st.image(image, use_container_width=True)
-                btn = st.button("Jalankan Deteksi")
-            with c2:
-                st.subheader("Hasil YOLOv9")
-                if btn:
-                    res = model(np.array(image))
-                    st.image(cv2.cvtColor(res[0].plot(), cv2.COLOR_BGR2RGB), use_container_width=True)
-                    for box in res[0].boxes:
-                        st.markdown(f'<div class="detection-badge">{res[0].names[int(box.cls[0])]} - Confidence: {float(box.conf[0])*100:.1f}%</div>', unsafe_allow_html=True)
+                btn_trigger = st.button("Jalankan Analisis Objek")
+            
+            with col2:
+                st.subheader("Hasil Lokalisasi YOLOv9")
+                if btn_trigger:
+                    img_array = np.array(image)
+                    img_bgr = cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR)
+                    results = model(img_bgr)
+                    result_img = results[0].plot()
+                    result_img_rgb = cv2.cvtColor(result_img, cv2.COLOR_BGR2RGB)
+                    st.image(result_img_rgb, use_container_width=True)
+                else:
+                    st.info("Silakan klik tombol di samping untuk memproses gambar.")
+            
+            if btn_trigger:
+                st.write("")
+                st.subheader("Detail Klasifikasi & Kepercayaan")
+                if len(results[0].boxes) > 0:
+                    for i, box in enumerate(results[0].boxes):
+                        class_id = int(box.cls[0])
+                        class_name = results[0].names[class_id]
+                        confidence = float(box.conf[0])
+                        st.markdown(
+                            f'<div class="detection-badge">Objek #{i+1} : <b>{class_name}</b> — Confidence Score: <b>{(confidence*100):.2f}%</b></div>', 
+                            unsafe_allow_html=True
+                        )
+                else:
+                    st.warning("Model tidak mendeteksi adanya gejala penyakit pada sampel daun ini.")
 
     # ==================== TAB 3: DETEKSI REAL-TIME ====================
     with tab_realtime:
         st.markdown('<div class="section-header">Deteksi Kamera Real-Time</div>', unsafe_allow_html=True)
-        webrtc_streamer(key="yolov9", video_transformer_factory=YoloVideoTransformer, rtc_configuration=RTC_CONFIGURATION)
+        
+        col_cam1, col_cam2 = st.columns([2, 1], gap="large")
+        with col_cam1:
+            st.subheader("Aliran Video WebRTC")
+            webrtc_streamer(
+                key="yolov9-forest-theme",
+                video_transformer_factory=YoloVideoTransformer,
+                rtc_configuration=RTC_CONFIGURATION,
+                media_stream_constraints={"video": True, "audio": False}
+            )
+            
+        with col_cam2:
+            st.subheader("Panduan Teknis")
+            st.caption("""
+            - Aktifkan fungsi kamera dengan menekan tombol START.
+            - Posisikan sampel daun kedelai secara sejajar di depan lensa.
+            - Akurasi inferensi real-time dipengaruhi oleh stabilitas perangkat dan intensitas cahaya sekitar.
+            """)
 
 else:
-    st.error("Model best.pt tidak ditemukan.")
+    st.error("Gagal menginisialisasi file bobot model 'best.pt'.")
 
-# 5. FOOTER
-st.markdown("<br><hr><p style='text-align: center; color: #7A8A80; font-size: 0.8rem;'>© 2026 | SoyLeaf-Guard | FMIPA Universitas Islam Indonesia</p>", unsafe_allow_html=True)
+# 5. FOOTER HALAMAN FORMAL SCIENTIFIC
+st.markdown(
+    """
+    <br><br><hr>
+    <p style='text-align: center; color: #7A8A80; font-size: 0.85rem;'>
+        © 2026 | SoyLeaf-Guard | Jurusan Statistika FMIPA | Universitas Islam Indonesia
+    </p>
+    """, 
+    unsafe_allow_html=True
+)
