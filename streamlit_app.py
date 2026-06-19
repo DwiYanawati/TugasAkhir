@@ -22,13 +22,17 @@ def get_image_base64(path):
             return base64.b64encode(image_file.read()).decode()
     return None
 
-# 2. SUNTIKAN CSS PREMIUM
+# 2. SUNTIKAN CSS PREMIUM WITH MODERN TYPOGRAPHY
 st.markdown("""
     <style>
+    /* Mengimpor Font Premium Modern dari Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;700;800&family=Playfair+Display:ital@1&display=swap');
+
     /* Background Global Modern */
     .stApp {
         background-color: #F5F9F7;
         font-family: 'Inter', sans-serif;
+        color: #2F3E3A;
     }
     
     /* Menyembunyikan Sidebar */
@@ -53,7 +57,8 @@ st.markdown("""
         background-color: #EEF5F2;
         border-radius: 10px;
         color: #1F6F5F;
-        font-weight: 600;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 700;
         font-size: 0.95rem;
         padding: 0px 24px;
         transition: all 0.25s ease;
@@ -74,28 +79,47 @@ st.markdown("""
 
     .stTabs [data-baseweb="tab-border"] { display: none !important; }
 
-    /* Gaya Judul Utama */
+    /* Gaya Judul Utama - Menggunakan Plus Jakarta Sans (Sangat Elegan) */
     .hero-title {
+        font-family: 'Plus Jakarta Sans', sans-serif;
         color: #1F6F5F;
         font-weight: 800;
-        font-size: 3.2rem;
+        font-size: 3.5rem;
+        letter-spacing: -1px;
         text-align: center;
         margin-top: 10px;
         margin-bottom: 4px;
     }
     .hero-sub {
+        font-family: 'Plus Jakarta Sans', sans-serif;
         color: #2FA084;
-        font-size: 1.25rem;
+        font-size: 1.3rem;
         text-align: center;
         margin-bottom: 45px;
         font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Teks Info Menggunakan Kombinasi Inter & Sentuhan Serif miring untuk nama ilmiah */
+    .info-text {
+        font-family: 'Inter', sans-serif;
+        font-size: 1.05rem;
+        line-height: 1.7;
+        color: #3A4D48;
+    }
+    .info-text i, .disease-box-desc i {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-weight: 500;
+        color: #1F6F5F;
     }
     
     /* Subjudul Bagian */
     .section-header {
+        font-family: 'Plus Jakarta Sans', sans-serif;
         color: #1F6F5F;
         font-weight: 700;
-        font-size: 1.6rem;
+        font-size: 1.7rem;
         margin-top: 35px;
         margin-bottom: 25px;
         padding-left: 5px;
@@ -142,17 +166,19 @@ st.markdown("""
     }
 
     .disease-box-title {
+        font-family: 'Plus Jakarta Sans', sans-serif;
         color: #1F6F5F;
         font-weight: 700;
-        font-size: 1.3rem;
+        font-size: 1.35rem;
         margin-bottom: 8px;
         margin-top: 0px;
     }
 
     .disease-box-desc {
-        color: #2F3E3A;
+        font-family: 'Inter', sans-serif;
+        color: #3A4D48;
         font-size: 0.98rem;
-        line-height: 1.6;
+        line-height: 1.65;
         text-align: justify;
         margin: 0px;
     }
@@ -169,9 +195,10 @@ st.markdown("""
     }
     
     .step-title-text {
+        font-family: 'Plus Jakarta Sans', sans-serif;
         color: #1F6F5F;
         font-weight: 700;
-        font-size: 1.15rem;
+        font-size: 1.2rem;
         margin-bottom: 15px;
         display: flex;
         align-items: center;
@@ -184,19 +211,22 @@ st.markdown("""
     }
 
     .step-list li {
+        font-family: 'Inter', sans-serif;
         margin-bottom: 12px;
-        color: #2F3E3A;
+        color: #3A4D48;
         font-size: 0.98rem;
-        line-height: 1.5;
+        line-height: 1.6;
     }
     
     /* Tombol Eksekusi */
     div.stButton > button:first-child {
+        font-family: 'Plus Jakarta Sans', sans-serif;
         background-color: #2FA084 !important;
         color: white !important;
         border-radius: 10px !important;
         padding: 12px 24px !important;
-        font-weight: 600 !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.5px;
         border: none !important;
         transition: all 0.2s ease !important;
         width: 100% !important;
@@ -208,6 +238,7 @@ st.markdown("""
     
     /* Badge Hasil */
     .detection-badge {
+        font-family: 'Inter', sans-serif;
         background-color: #EEF5F2;
         border-left: 5px solid #2FA084;
         padding: 14px;
@@ -216,6 +247,13 @@ st.markdown("""
         font-weight: 600;
         color: #1F6F5F;
         font-size: 1rem;
+    }
+
+    /* Target Element Headings Bawaan Streamlit agar Selaras */
+    h2, h3, h4, .stMarkdown h2, .stMarkdown h3 {
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-weight: 700 !important;
+        color: #1F6F5F !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -395,7 +433,7 @@ else:
 st.markdown(
     """
     <br><br><hr>
-    <p style='text-align: center; color: #7A8A80; font-size: 0.85rem;'>
+    <p style='text-align: center; color: #7A8A80; font-family: "Plus Jakarta Sans", sans-serif; font-size: 0.85rem; font-weight: 500;'>
         © 2026 | SoyLeaf-Guard | Universitas Islam Indonesia
     </p>
     """, 
