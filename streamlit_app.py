@@ -295,7 +295,7 @@ if model is not None:
                 "filename": "bercaktarget.jpg"
             },
             {
-                "title": "5. Daun Sehat (Healthy Leaf) - Kontrol Pembanding",
+                "title": "5. Daun Sehat (Healthy Leaf)",
                 "desc": "Kondisi kontrol pembanding dimana organ vegetatif daun kedelai memiliki pigmen klorofil hijau merata yang homogen, berstruktur mulus, serta bersih sepenuhnya dari tanda-tanda nekrosis, klorosis, bintik pustul, maupun kerusakan jaringan akibat paparan patogen.",
                 "filename": "healthy.jpg"
             }
@@ -325,7 +325,7 @@ if model is not None:
         st.markdown('<div class="section-header">Deteksi Upload Gambar</div>', unsafe_allow_html=True)
         
         # SATU KOTAK UTUH LANGKAH PENGGUNAAN UPLOAD (Sudah Diperbaiki tanpa Indentasi Bermasalah)
-        st.markdown('<div class="single-step-box"><div class="step-title-text">📋 Langkah Penggunaan:</div><ul class="step-list"><li><b>Unggah Citra Daun:</b> Klik area berkas di bawah untuk memasukkan foto daun kedelai (Format: JPG, JPEG, atau PNG).</li><li><b>Jalankan Inferensi:</b> Klik tombol hijau <b>"Deteksi Penyakit Daun Kedelai"</b> untuk memicu pemindaian model kecerdasan buatan YOLOv9.</li><li><b>Evaluasi Prediksi:</b> Tinjau area kanan untuk melihat hasil lokalisasi bercak serta akurasi presentase (Confidence Score).</li></ul></div>', unsafe_allow_html=True)
+        st.markdown('<div class="single-step-box"><div class="step-title-text">Langkah Penggunaan:</div><ul class="step-list"><li><b>Unggah Gambar Daun:</b> Klik area berkas di bawah untuk memasukkan foto daun kedelai (Format: JPG, JPEG, atau PNG).</li><li><b>Jalankan Inferensi:</b> Klik tombol hijau <b>"Deteksi Penyakit Daun Kedelai"</b> untuk memicu pemindaian model kecerdasan buatan YOLOv9.</li><li><b>Evaluasi Prediksi:</b> Tinjau area kanan untuk melihat hasil lokalisasi bercak serta akurasi presentase (Confidence Score).</li></ul></div>', unsafe_allow_html=True)
             
         uploaded_file = st.file_uploader("Pilih file gambar daun kedelai:", type=["jpg", "png"])
         
@@ -370,7 +370,7 @@ if model is not None:
         st.markdown('<div class="section-header">Deteksi Kamera Real-Time</div>', unsafe_allow_html=True)
         
         # SATU KOTAK UTUH LANGKAH PENGGUNAAN KAMERA REAL-TIME (Sudah Diperbaiki)
-        st.markdown('<div class="single-step-box"><div class="step-title-text">📋 Langkah Penggunaan Kamera Real-Time:</div><ul class="step-list"><li><b>Izinkan Akses Perangkat:</b> Pastikan browser diberikan izin penuh untuk mengakses hardware webcam laptop Anda.</li><li><b>Mulai Deteksi:</b> Tekan tombol <b>"START"</b> pada jendela pemutar WebRTC untuk mengaktifkan pemindaian video langsung.</li><li><b>Deteksi Otomatis:</b> Hadapkan sisi fisik daun kedelai secara sejajar di depan lensa kamera hingga deteksi otomatis muncul tanpa kotak pembatas.</li></ul></div>', unsafe_allow_html=True)
+        st.markdown('<div class="single-step-box"><div class="step-title-text">Langkah Penggunaan:</div><ul class="step-list"><li><b>Izinkan Akses Perangkat:</b> Pastikan browser diberikan izin penuh untuk mengakses hardware webcam laptop Anda.</li><li><b>Mulai Deteksi:</b> Tekan tombol <b>"START"</b> pada jendela pemutar WebRTC untuk mengaktifkan pemindaian video langsung.</li><li><b>Deteksi Otomatis:</b> Hadapkan sisi fisik daun kedelai secara sejajar di depan lensa kamera hingga deteksi otomatis muncul tanpa kotak pembatas.</li></ul></div>', unsafe_allow_html=True)
             
         col_cam1, col_cam2 = st.columns([2, 1], gap="large")
         with col_cam1:
