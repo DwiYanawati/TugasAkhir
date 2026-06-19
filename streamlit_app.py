@@ -157,7 +157,7 @@ st.markdown("""
         margin: 0px;
     }
     
-    /* GRID KARTU METODOLOGI ALUR */
+    /* KOTAK LANGKAH PENGGUNAAN MODERN (GRID KARTU METODOLOGI) */
     .step-section-title {
         color: #1F6F5F;
         font-weight: 700;
@@ -171,37 +171,44 @@ st.markdown("""
     .grid-step-container {
         display: flex;
         gap: 16px;
-        margin-bottom: 30px;
+        margin-bottom: 35px;
     }
 
     .step-card {
         background-color: #FFFFFF;
         border: 1px solid #E2EFEA;
         border-top: 4px solid #1F6F5F;
-        border-radius: 12px;
-        padding: 18px;
+        border-radius: 14px;
+        padding: 20px;
         flex: 1;
-        box-shadow: 0 4px 12px rgba(31, 111, 95, 0.03);
+        box-shadow: 0 4px 15px rgba(31, 111, 95, 0.03);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .step-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(31, 111, 95, 0.07);
     }
 
     .step-number {
-        font-size: 1.4rem;
+        font-size: 1.6rem;
         font-weight: 800;
         color: #2FA084;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
+        font-family: 'Courier New', monospace;
     }
 
     .step-card-title {
         font-weight: 700;
         color: #1F6F5F;
-        font-size: 1rem;
-        margin-bottom: 8px;
+        font-size: 1.05rem;
+        margin-bottom: 10px;
     }
 
     .step-card-body {
         color: #4A5551;
-        font-size: 0.9rem;
-        line-height: 1.5;
+        font-size: 0.92rem;
+        line-height: 1.6;
         text-align: justify;
     }
     
@@ -314,10 +321,9 @@ if model is not None:
             }
         ]
 
-        # PROSES PEMBUNGKUSAN TOTAL (Gambar base64 + Teks di dalam satu div)
+        # PROSES PEMBUNGKUSAN TOTAL
         for d in diseases:
             img_base64 = get_image_base64(d["filename"])
-            
             if img_base64:
                 img_tag = f"<img src='data:image/jpeg;base64,{img_base64}' alt='{d['title']}' />"
             else:
@@ -340,23 +346,24 @@ if model is not None:
     with tab_upload:
         st.markdown('<div class="section-header">Deteksi Komputasi Berbasis Citra Digital</div>', unsafe_allow_html=True)
         
+        # Grid Kartu Panduan Operasional Upload
         st.markdown("""
         <div class="step-section-title">📋 Protokol Operasional Pengujian Dokumen Digital:</div>
         <div class="grid-step-container">
             <div class="step-card">
                 <div class="step-number">01</div>
                 <div class="step-card-title">Pengunggahan Spesimen</div>
-                <div class="step-card-body">Unggah data input berupa citra digital daun kedelai melalui kompartemen berkas yang tersedia. Format ekstensi yang didukung secara valid meliputi ekstensi standardisasi <b>JPG</b> atau <b>PNG</b>.</div>
+                <div class="step-card-body">Unggah data input berupa citra digital daun kedelai melalui kompartemen berkas yang tersedia. Format spesifikasi berkas yang didukung secara valid meliputi standardisasi ekstensi <b>JPG</b> atau <b>PNG</b>.</div>
             </div>
             <div class="step-card">
                 <div class="step-number">02</div>
                 <div class="step-card-title">Inisiasi Proses Inferensi</div>
-                <div class="step-card-body">Tekan tombol eksekusi <b>"Deteksi Penyakit Daun"</b> untuk menstimulasi jaringan arsitektur model kecerdasan buatan YOLO dalam melakukan proses kalkulasi dan ekstraksi fitur fungsional.</div>
+                <div class="step-card-body">Tekan instruksi perintah <b>"Deteksi Penyakit Daun"</b> untuk menstimulasi jaringan arsitektur model kecerdasan buatan YOLO dalam melakukan kalkulasi pengenalan fitur fungsional patogen.</div>
             </div>
             <div class="step-card">
                 <div class="step-number">03</div>
                 <div class="step-card-title">Analisis Parameter Output</div>
-                <div class="step-card-body">Lakukan evaluasi terhadap visualisasi interpretasi model di panel kanan guna mengamati lokalisasi sebaran lesi patogen beserta nilai derajat keandalan matematis (<i>Confidence Score</i>).</div>
+                <div class="step-card-body">Lakukan evaluasi terhadap visualisasi interpretasi model pada panel kanan guna mengamati segmentasi sebaran lesi patogen beserta nilai tingkat keandalan matematis (<i>Confidence Score</i>).</div>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -403,23 +410,24 @@ if model is not None:
     with tab_realtime:
         st.markdown('<div class="section-header">Deteksi Sekuensial Berbasis Aliran Video Real-Time</div>', unsafe_allow_html=True)
         
+        # Grid Kartu Panduan Operasional Real-Time
         st.markdown("""
         <div class="step-section-title">📋 Protokol Operasional Pemindaian Dinamis:</div>
         <div class="grid-step-container">
             <div class="step-card">
                 <div class="step-number">01</div>
                 <div class="step-card-title">Autentikasi Hak Akses</div>
-                <div class="step-card-body">Berikan otorisasi penuh pada peramban (browser) untuk mengakses subsistem penangkap gambar/hardware webcam guna menjamin transmisi data visual berjalan tanpa hambatan.</div>
+                <div class="step-card-body">Berikan otorisasi penuh pada peramban (browser) untuk mengakses subsistem penangkap gambar periferal/webcam guna menjamin kelancaran transmisi data sekuensial secara aktual.</div>
             </div>
             <div class="step-card">
                 <div class="step-number">02</div>
                 <div class="step-card-title">Aktivasi Aliran Data</div>
-                <div class="step-card-body">Tekan instruksi perintah <b>"START"</b> pada antarmuka pemutar WebRTC untuk mengaktifkan pemindaian matriks piksel video secara kontinu dan aktual.</div>
+                <div class="step-card-body">Tekan parameter kendali perintah <b>"START"</b> pada antarmuka pemutar WebRTC untuk menginisiasi pemindaian matriks piksel video streaming secara kontinu dan kontinu.</div>
             </div>
             <div class="step-card">
                 <div class="step-number">03</div>
-                <div class="step-card-title">Penyelarasan Objek</div>
-                <div class="step-card-body">Posisikan bidang geometri daun kedelai secara tegak lurus dan sejajar di depan lensa sensor kamera hingga arsitektur mendeteksi gejala secara otomatis melalui kotak pembatas (<i>bounding box</i>).</div>
+                <div class="step-card-title">Penyelarasan Bidang Geometri</div>
+                <div class="step-card-body">Posisikan orientasi fisik daun kedelai secara sejajar dan konstan di depan lensa sensor penangkap objek hingga arsitektur mendeteksi gejala lesi secara otomatis melalui penanda kotak pembatas.</div>
             </div>
         </div>
         """, unsafe_allow_html=True)
