@@ -95,7 +95,7 @@ st.markdown("""
         padding-bottom: 8px;
     }
 
-    /* KOTAK RINGKASAN LATAR BELAKANG (SKRIPSI STYLE) */
+    /* KOTAK RINGKASAN LATAR BELAKANG & LANDASAN TEORI (SKRIPSI STYLE) */
     .bg-skripsi-box {
         background-color: #FFFFFF;
         border-radius: 14px;
@@ -266,17 +266,33 @@ if model is not None:
         st.markdown('<h1 class="hero-title">SoyLeaf-Guard</h1>', unsafe_allow_html=True)
         st.markdown('<p class="hero-sub">Sistem Komputasi Pakar Identifikasi Dini Penyakit Daun Kedelai</p>', unsafe_allow_html=True)
         
-        # 1. Pembahasan Latar Belakang Masalah (Disesuaikan Garis Besar Skripsi Dwi)
+        # 1. Teks Penjelasan Awal Secara Garis Besar (Gabungan Esensi Bab III Skripsi Dwi)
+        st.markdown('<div class="bg-skripsi-box" style="margin-top: 20px;">', unsafe_allow_html=True)
+        st.markdown("""
+        <p class="info-text">
+        Kedelai (<i>Glycine max L.</i>) merupakan tanaman kacang-kacangan kaya nutrisi yang berfungsi sebagai sumber protein nabati utama bagi masyarakat, 
+        serta memiliki sifat adaptif tinggi dan berperan sebagai pupuk hijau penyubur tanah (Syaiul et al., 2020; Purwono & Purnamawati, 2007). 
+        Meskipun bernilai strategis, produktivitas komoditas ini kerap terancam oleh keberadaan patogen makroskopis yang menyerang organ vegetatif, 
+        khususnya pada area permukaan daun (Atman, 2022).
+        </p>
+        <p class="info-text">
+        Secara umum, terdapat empat jenis infeksi penyakit daun utama yang merugikan di lapangan, yaitu Karat Daun (<i>Phakopsora pachyrhizi</i>), 
+        Pustul Bakteri (<i>Xanthomonas axonopodis</i>), Embun Bulu (<i>Peronospora manshurica</i>), dan Bercak Target (<i>Corynespora cassiicola</i>). 
+        Serangan patogen ini dapat memicu klorosis jaringan, kerusakan klorofil, hingga keguguran daun pramatang yang berpotensi menurunkan hasil panen secara signifikan (Sumartini, 2016; Atman, 2022).
+        </p>
+        """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+        # 1.1 Latar Belakang & Urgensi Penelitian (Latar Belakang Makro)
         st.markdown('<div class="section-header">1.1 Latar Belakang & Urgensi Penelitian</div>', unsafe_allow_html=True)
-        
         st.markdown('<div class="bg-skripsi-box">', unsafe_allow_html=True)
         st.markdown("""
         <div class="info-title-skripsi">Urgensi Komoditas & Masalah Produktivitas</div>
         <p class="info-text">
-        Kedelai (<i>Glycine max L.</i>) merupakan komoditas pangan strategis global penyedia protein dan minyak nabati terbesar (Chiozza et al., 2020; Liu, 2004). 
+        Kedelai merupakan komoditas pangan strategis global penyedia protein dan minyak nabati terbesar (Chiozza et al., 2020; Liu, 2004). 
         Di Indonesia, permintaan domestik diproyeksikan melonjak hingga 2,75 juta ton pada tahun 2025, namun kapasitas produksi nasional masih rendah 
         akibat serangan Organisme Pengganggu Tanaman (OPT) pada organ daun (BPS, 2025; Badan Pangan Nasional). Penyakit utama yang merugikan meliputi 
-        Karat Daun (<i>Phakopsora pachyrhizi</i>), Pustul Bakteri (<i>Xanthomonas axonopodis</i>), Embun Bulu (<i>Peronospora manshurica</i>), dan Bercak Target (<i>Corynespora cassiicola</i>) (Atman, 2022).
+        Karat Daun, Pustul Bakteri, Embun Bulu, dan Bercak Target (Atman, 2022).
         </p>
         
         <div class="info-title-skripsi">Kelemahan Identifikasi Konvensional & Solusi Alur Komputasi</div>
