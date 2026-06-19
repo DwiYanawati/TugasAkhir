@@ -14,7 +14,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed" 
 )
 
-# 2. SUNTIKAN CSS PREMIUM (Kombinasi Warna Modern & Kotak Timbul Bayangan)
+# 2. SUNTIKAN CSS PREMIUM (Kombinasi Warna Modern & Kotak Timbul Tebal Sesuai Gambar)
 st.markdown("""
     <style>
     /* Background Global Modern */
@@ -52,14 +52,12 @@ st.markdown("""
         border: none !important;
     }
     
-    /* Efek Hover Menu */
     .stTabs [data-baseweb="tab"]:hover {
         background-color: #6FCF97;
         color: #1F6F5F;
         transform: translateY(-1px);
     }
     
-    /* Menu Aktif Terpilih */
     .stTabs [aria-selected="true"] {
         background-color: #1F6F5F !important;
         color: #FFFFFF !important;
@@ -91,7 +89,7 @@ st.markdown("""
         font-weight: 700;
         font-size: 1.6rem;
         margin-top: 35px;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
         padding-left: 5px;
         border-bottom: 2px solid #E2EFEA;
         padding-bottom: 8px;
@@ -104,29 +102,66 @@ st.markdown("""
         text-align: justify;
     }
 
-    /* KOTAK TIMBUL DENGAN BAYANGAN HALUS (CARD DISEASES) */
-    .disease-card-box {
-        background-color: #FFFFFF;
-        padding: 24px;
-        border-radius: 16px;
-        box-shadow: 0 10px 25px rgba(31, 111, 95, 0.07);
-        border: 1px solid #E2EFEA;
-        border-left: 5px solid #2FA084;
-        margin-bottom: 25px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .disease-card-box:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 14px 30px rgba(31, 111, 95, 0.12);
-    }
-    .disease-title {
-        color: #1F6F5F;
-        font-weight: 700;
-        font-size: 1.35rem;
-        margin-bottom: 12px;
+    /* KOTAK TIMBUL TEBAL PER PENYAKIT (GRID CARD STYLE) */
+    .disease-grid-container {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
     }
     
-    /* Tombol Eksekusi Deteksi */
+    .disease-card {
+        background-color: #FFFFFF;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(31, 111, 95, 0.12); /* Efek Bayangan Timbul Kuat */
+        border: 1px solid #E2EFEA;
+        padding: 16px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .disease-card:hover {
+        transform: translateY(-5px); /* Efek pop-up melayang */
+        box-shadow: 0 15px 35px rgba(31, 111, 95, 0.18);
+    }
+
+    /* Memaksa Foto Berukuran Landscape Seragam */
+    .landscape-img-container {
+        width: 100%;
+        height: 160px; /* Tinggi seragam untuk semua gambar */
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 14px;
+    }
+    
+    .landscape-img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Memotong gambar menjadi landscape proporsional */
+    }
+
+    .disease-card-title {
+        color: #1F6F5F;
+        font-weight: 700;
+        font-size: 1.15rem;
+        margin-bottom: 8px;
+        min-height: 45px; /* Menjaga teks judul tetap sejajar tinggiya */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .disease-card-desc {
+        color: #4A5D55;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        text-align: justify;
+    }
+    
+    /* Tombol Deteksi */
     div.stButton > button:first-child {
         background-color: #2FA084 !important;
         color: white !important;
@@ -190,7 +225,7 @@ if model is not None:
         st.markdown('<h1 class="hero-title">SoyLeaf-Guard</h1>', unsafe_allow_html=True)
         st.markdown('<p class="hero-sub">Sistem Komputasi Pakar Identifikasi Dini Penyakit Daun Kedelai</p>', unsafe_allow_html=True)
         
-        # 1. Kasus Penyakit Daun Kedelai (Narasi Ilmiah Bab 1 Skripsi)
+        # 1. Kasus Penyakit Daun Kedelai
         st.markdown('<div class="section-header">Kasus & Urgensi Penyakit Daun Kedelai</div>', unsafe_allow_html=True)
         st.markdown("""
         <p class="info-text">
@@ -207,53 +242,59 @@ if model is not None:
         </p>
         """, unsafe_allow_html=True)
 
-        # 2. Jenis Penyakit Daun Kedelai (Katalog Kotak Timbul + Link Gambar Lokal Anda)
+        # 2. Jenis Penyakit Daun Kedelai (Bentuk Kotak Timbul Berjejer Ke Samping)
         st.markdown('<div class="section-header">Jenis Penyakit Daun Kedelai</div>', unsafe_allow_html=True)
         
         diseases = [
             {
-                "title": "1. Karat Daun (Soybean Rust)",
-                "desc": "Disebabkan oleh infeksi jamur patogen <i>Phakopsora pachyrhizi</i>. Gejala awal ditandai dengan munculnya bercak pustul kecil berwarna cokelat kelabu atau kemerahan di permukaan bawah daun, mengakibatkan klorosis jaringan sekitar hingga daun gugur pra-matang.",
+                "title": "Karat Daun<br>(Soybean Rust)",
+                "desc": "Disebabkan oleh infeksi jamur patogen <i>Phakopsora pachyrhizi</i>. Gejala awal ditandai dengan munculnya bercak pustul kecil berwarna cokelat kelabu atau kemerahan di permukaan bawah daun.",
                 "filename": "karatdaun.jpg"
             },
             {
-                "title": "2. Pustul Bakteri (Bacterial Pustule)",
-                "desc": "Disebabkan oleh agen infeksi bakteri <i>Xanthomonas axonopodis pv. glycines</i>. Karakteristik visual dicirikan oleh bintik kecil berwarna kemerahan yang mengalami elevasi menonjol di bagian tengah, umumnya dikelilingi oleh cincin kuning halus (halo) di sekeliling area infeksi.",
+                "title": "Pustul Bakteri<br>(Bacterial Pustule)",
+                "desc": "Disebabkan oleh bakteri <i>Xanthomonas axonopodis pv. glycines</i>. Karakteristik visual dicirikan bintik kecil kemerahan menonjol di tengah, dikelilingi oleh cincin kuning halus (halo).",
                 "filename": "pustulbakteri.jpg"
             },
             {
-                "title": "3. Embun Bulu (Downy Mildew)",
-                "desc": "Disebabkan oleh cendawan oomycete <i>Peronospora manshurica</i>. Permukaan atas helaian daun memperlihatkan sebaran bercak hijau pucat atau kuning kelabu, sedangkan pada area permukaan bawah daun ditumbuhi oleh kumpulan massa konidia halus berwarna abu-abu keunguan.",
+                "title": "Embun Bulu<br>(Downy Mildew)",
+                "desc": "Disebabkan oleh cendawan <i>Peronospora manshurica</i>. Permukaan atas daun memperlihatkan sebaran bercak kuning kelabu, sedangkan permukaan bawah tumbuh kumpulan konidia halus abu-abu.",
                 "filename": "embunbulu.jpg"
             },
             {
-                "title": "4. Bercak Target (Target Spot)",
-                "desc": "Disebabkan oleh jamur nekrotrofik <i>Corynespora cassiicola</i>. Gejala ditandai dengan pembentukan lesi atau bercak cokelat melingkar berdiameter besar yang menampilkan pola struktur lingkaran konsentris berlapis menyerupai bentuk papan sasaran tembak.",
+                "title": "Bercak Target<br>(Target Spot)",
+                "desc": "Disebabkan oleh jamur <i>Corynespora cassiicola</i>. Gejala ditandai dengan lesi cokelat melingkar berdiameter besar yang menampilkan pola lingkaran konsentris berlapis menyerupai sasaran tembak.",
                 "filename": "bercaktarget.jpg"
             },
             {
-                "title": "5. Daun Sehat (Healthy Leaf)",
-                "desc": "Kondisi kontrol pembanding dimana organ daun memiliki pigmen klorofil hijau merata yang homogen, bertekstur mulus, serta bersih sepenuhnya dari segala jenis bentuk nekrosis, klorosis, maupun degradasi akibat serangan organisme pengganggu tanaman.",
+                "title": "Daun Sehat<br>(Healthy Leaf)",
+                "desc": "Kondisi kontrol pembanding dimana organ daun memiliki pigmen klorofil hijau merata yang homogen, bertekstur mulus, serta bersih sepenuhnya dari segala jenis infeksi patogen.",
                 "filename": "healthy.jpg"
             }
         ]
 
-        # Perulangan untuk membuat kotak timbul otomatis
-        for d in diseases:
-            st.markdown('<div class="disease-card-box">', unsafe_allow_html=True)
-            col_img, col_txt = st.columns([1, 2.5], gap="large")
-            
-            with col_img:
+        # Membuat susunan 5 Kolom sejajar ke samping secara otomatis
+        cols = st.columns(5, gap="medium")
+        
+        for index, d in enumerate(diseases):
+            with cols[index]:
+                # Cek ketersediaan gambar lokal
                 if os.path.exists(d["filename"]):
-                    st.image(d["filename"], use_container_width=True)
-                else:
-                    st.warning(f"Berkas '{d['filename']}' tidak ditemukan di folder utama.")
+                    img_elem = f'<img src="data:image/jpeg;base64,...">' # Placeholder logic handeled cleanly by streamlit layout below
                     
-            with col_txt:
-                st.markdown(f'<div class="disease-title">{d["title"]}</div>', unsafe_allow_html=True)
-                st.markdown(f'<p class="info-text" style="margin:0;">{d["desc"]}</p>', unsafe_allow_html=True)
-                
-            st.markdown('</div>', unsafe_allow_html=True)
+                    # Trik membungkus elemen Streamlit Image ke dalam Custom CSS Landscape Card Container
+                    st.markdown(f'<div class="disease-card">', unsafe_allow_html=True)
+                    st.image(d["filename"], use_container_width=True)
+                    st.markdown(f'<div class="disease-card-title">{d["title"]}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="disease-card-desc">{d["desc"]}</div>', unsafe_allow_html=True)
+                    st.markdown('</div>', unsafe_allow_html=True)
+                else:
+                    # Tampilan Fallback jika gambar belum dipindah ke folder aplikasi
+                    st.markdown(f'<div class="disease-card">', unsafe_allow_html=True)
+                    st.error(f"File '{d['filename']}' tidak ditemukan.")
+                    st.markdown(f'<div class="disease-card-title">{d["title"]}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="disease-card-desc">{d["desc"]}</div>', unsafe_allow_html=True)
+                    st.markdown('</div>', unsafe_allow_html=True)
 
     # ==================== TAB 2: DETEKSI UPLOAD ====================
     with tab_upload:
