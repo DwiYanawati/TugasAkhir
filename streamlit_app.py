@@ -95,36 +95,49 @@ st.markdown("""
         padding-bottom: 8px;
     }
 
-    /* KOTAK TIMBUL PENYAKIT (KOTAK PUTIH PANJANG PREMIUM) */
-    .disease-vertical-box {
+    /* KOTAK PUTIH PANJANG PREMIUM UNTUK PENYAKIT */
+    .disease-container-box {
         background-color: #FFFFFF;
         border-radius: 16px;
-        box-shadow: 0 6px 18px rgba(31, 111, 95, 0.05);
+        box-shadow: 0 4px 15px rgba(31, 111, 95, 0.05);
         border: 1px solid #E2EFEA;
-        padding: 24px;
-        margin-top: 15px;
+        padding: 20px;
         margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     
-    .disease-vertical-box:hover {
+    .disease-container-box:hover {
         transform: translateY(-2px);
-        box-shadow: 0 12px 25px rgba(31, 111, 95, 0.1);
+        box-shadow: 0 10px 22px rgba(31, 111, 95, 0.1);
     }
     
-    .image-landscape-wrapper img {
-        width: 100% !important;
-        height: auto !important;
-        border-radius: 8px;
-        object-fit: cover !important;
+    .disease-img-wrapper {
+        flex: 1;
+        min-width: 150px;
+        max-width: 200px;
+    }
+
+    .disease-img-wrapper img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .disease-text-wrapper {
+        flex: 4;
     }
 
     .disease-box-title {
         color: #1F6F5F;
         font-weight: 700;
         font-size: 1.3rem;
-        margin-bottom: 10px;
-        text-align: left;
+        margin-bottom: 8px;
+        margin-top: 0px;
     }
 
     .disease-box-desc {
@@ -132,6 +145,7 @@ st.markdown("""
         font-size: 0.98rem;
         line-height: 1.6;
         text-align: justify;
+        margin: 0px;
     }
     
     /* GAYA VISUAL LANGKAH PENGGUNAAN */
@@ -248,7 +262,7 @@ if model is not None:
 
         st.markdown('<div class="section-header">Jenis Penyakit Daun Kedelai</div>', unsafe_allow_html=True)
 
-        # 2. Jenis Penyakit Daun Kedelai
+        # 2. Data Jenis Penyakit Daun Kedelai
         diseases = [
             {
                 "title": "1. Penyakit Karat Daun (Phakopsora pachyrhizi)",
@@ -271,43 +285,29 @@ if model is not None:
                 "filename": "bercaktarget.jpg"
             },
             {
-                "title": "5. Daun Sehat (Healthy Leaf)",
+                "title": "5. Daun Sehat (Healthy Leaf) - Kontrol Pembanding",
                 "desc": "Kondisi kontrol pembanding dimana organ vegetatif daun kedelai memiliki pigmen klorofil hijau merata yang homogen, berstruktur mulus, serta bersih sepenuhnya dari tanda-tanda nekrosis, klorosis, bintik pustul, maupun kerusakan jaringan akibat paparan patogen.",
                 "filename": "healthy.jpg"
             }
         ]
 
-        # Loop Penyakit Bersih Menggunakan Wadah Tunggal HTML Berwarna Putih
+        # LOOPING TOTAL: Gambar dan Teks dipaksa masuk menggunakan tag HTML murni agar menyatu sempurna dalam kotak putih
         for d in diseases:
-            # Menggunakan gabungan string murni untuk menghindari kebocoran elemen Streamlit di dalam HTML container
-            content_html = f"""
-            <div class="disease-vertical-box">
-                <table style="width:100%; border:none; border-collapse:collapse; background:transparent;">
-                    <tr style="background:transparent; border:none;">
-                        <td style="width:20%; vertical-align:top; border:none; padding-right:20px;">
-                            <div class="image-landscape-wrapper">
-            """
-            st.markdown(content_html, unsafe_allow_html=True)
+            # Menggunakan skema fallback jika file gambar tidak ditemukan di lokal
+            img_src = d["filename"] if os.path.exists(d["filename"]) else ""
             
-            # Gambar ditaruh di kolom kiri secara aman
-            if os.path.exists(d["filename"]):
-                st.image(d["filename"], use_container_width=True)
-            else:
-                st.error("No Image")
-                
-            # Penutup kolom kiri dan beralih ke teks penjelasan di kolom kanan
-            end_html = f"""
-                            </div>
-                        </td>
-                        <td style="width:80%; vertical-align:top; border:none;">
-                            <div class="disease-box-title">{d["title"]}</div>
-                            <div class="disease-box-desc">{d["desc"]}</div>
-                        </td>
-                    </tr>
-                </table>
+            disease_html = f"""
+            <div class="disease-container-box">
+                <div class="disease-img-wrapper">
+                    {"<img src='app/static/" + d["filename"] + "' />" if img_src else "<div style='background:#EEF5F2; padding:20px; border-radius:8px; color:#1F6F5F; font-weight:bold; text-align:center;'>No Image</div>"}
+                </div>
+                <div class="disease-text-wrapper">
+                    <h3 class="disease-box-title">{d["title"]}</h3>
+                    <p class="disease-box-desc">{d["desc"]}</p>
+                </div>
             </div>
             """
-            st.markdown(end_html, unsafe_allow_html=True)
+            st.markdown(disease_html, unsafe_allow_html=True)
 
     # ==================== TAB 2: DETEKSI UPLOAD ====================
     with tab_upload:
