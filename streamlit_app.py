@@ -6,7 +6,7 @@ import os
 from ultralytics import YOLO
 from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, RTCConfiguration
 
-# Mengatasi error DecompressionBomb karena ukuran gambar terlalu besar
+# Mengatasi error DecompressionBomb jika ada gambar yang ukurannya terlampau raksasa
 Image.MAX_IMAGE_PIXELS = None
 
 # 1. SET CONFIG UTAMA
@@ -98,7 +98,7 @@ st.markdown("""
         padding-bottom: 8px;
     }
 
-    /* KOTAK RINGKASAN LATAR BELAKANG & LANDASAN TEORI (SKRIPSI STYLE) */
+    /* KOTAK RINGKASAN LATAR BELAKANG */
     .bg-skripsi-box {
         background-color: #FFFFFF;
         border-radius: 14px;
@@ -116,7 +116,7 @@ st.markdown("""
         margin-bottom: 15px;
     }
 
-    /* KOTAK TIMBUL PENYAKIT (HORIZONTAL ROW DESIGN) */
+    /* KOTAK TIMBUL PENYAKIT */
     .disease-vertical-box {
         background-color: #FFFFFF;
         border-radius: 16px;
@@ -163,7 +163,7 @@ st.markdown("""
         text-align: justify;
     }
     
-    /* GAYA VISUAL LANGKAH PENGGUNAAN SATU KOTAK UTUH */
+    /* GAYA VISUAL LANGKAH PENGGUNAAN */
     .single-step-box {
         background-color: #FFFFFF;
         border-radius: 14px;
@@ -239,7 +239,7 @@ def load_model():
     try:
         model = YOLO("best.pt")
         return model
-    except:
+    except Exception as e:
         return None
 
 model = load_model()
@@ -247,10 +247,13 @@ model = load_model()
 RTC_CONFIGURATION = RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]})
 
 class YoloVideoTransformer(VideoTransformerBase):
-    def __init__(self): self.model = model
+    def __init__(self): 
+        self.model = model
     def transform(self, frame):
         img = frame.to_ndarray(format="bgr24")
-        return self.model(img, conf=0.25)[0].plot(boxes=False)
+        if self.model is not None:
+            return self.model(img, conf=0.25)[0].plot(boxes=False)
+        return img
 
 
 if model is not None:
@@ -292,7 +295,10 @@ if model is not None:
             with inner_col1:
                 st.markdown('<div class="image-landscape-wrapper">', unsafe_allow_html=True)
                 if os.path.exists(d["filename"]):
-                    st.image(d["filename"], width="stretch")
+                    try:
+                        st.image(d["filename"], width=150)
+                    except:
+                        st.error("Format Error")
                 else:
                     st.error("No Image")
                 st.markdown('</div>', unsafe_allow_html=True)
@@ -317,7 +323,7 @@ if model is not None:
             
             with col1:
                 st.subheader("Gambar Asli")
-                st.image(image, width="stretch")
+                st.image(image, width=450)
                 btn_trigger = st.button("Deteksi Penyakit Daun")
             
             with col2:
@@ -328,7 +334,7 @@ if model is not None:
                     results = model(img_bgr)
                     result_img = results[0].plot(boxes=False)
                     result_img_rgb = cv2.cvtColor(result_img, cv2.COLOR_BGR2RGB)
-                    st.image(result_img_rgb, width="stretch")
+                    st.image(result_img_rgb, width=450)
                 else:
                     st.info("Silakan klik tombol di samping untuk memproses gambar.")
             
@@ -347,25 +353,37 @@ if model is not None:
     # ==================== TAB 3: DETEKSI REAL-TIME ====================
     with tab_realtime:
         st.markdown('<div class="section-header">Deteksi Kamera Real-Time</div>', unsafe_allow_html=True)
-        
         st.markdown('<div class="single-step-box"><div class="step-title-text">📋 Langkah Penggunaan Kamera Real-Time:</div><ul class="step-list"><li><b>Mulai Deteksi:</b> Tekan tombol <b>"START"</b> pada jendela pemutar WebRTC.</li></ul></div>', unsafe_allow_html=True)
             
         col_cam1, col_cam2 = st.columns([2, 1], gap="large")
         with col_cam1:
             st.subheader("Aliran Video WebRTC")
-            webrtc_streamer(
-                key="yolov9-clean-final",
-                video_processor_factory=YoloVideoTransformer,
-                rtc_configuration=RTC_CONFIGURATION,
-                media_stream_constraints={"video": True, "audio": False}
-            )
+            
+            # Sistem proteksi otomatis agar tidak crash akibat perbedaan versi streamlit-webrtc
+            try:
+                webrtc_streamer(
+                    key="yolov9-clean-final-v1",
+                    video_processor_factory=YoloVideoTransformer,
+                    rtc_configuration=RTC_CONFIGURATION,
+                    media_stream_constraints={"video": True, "audio": False}
+                )
+            except Exception as e:
+                try:
+                    webrtc_streamer(
+                        key="yolov9-clean-final-v2",
+                        video_transformer_factory=YoloVideoTransformer,
+                        rtc_configuration=RTC_CONFIGURATION,
+                        media_stream_constraints={"video": True, "audio": False}
+                    )
+                except Exception as e_inner:
+                    st.error(f"Gagal memuat komponen kamera WebRTC: {e_inner}")
             
         with col_cam2:
             st.subheader("Catatan Teknis Stabilitas")
             st.caption("- Pastikan jarak objek daun tidak terlalu dekat agar tidak blur.")
 
 else:
-    st.error("Gagal menginisialisasi file bobot model 'best.pt'.")
+    st.error("Gagal menginisialisasi file bobot model 'best.pt'. Pastikan file diletakkan di repositori utama.")
 
 # 5. FOOTER
 st.markdown("<br><br><hr><p style='text-align: center; color: #7A8A80; font-size: 0.85rem;'>© 2026 | SoyLeaf-Guard | Universitas Islam Indonesia</p>", unsafe_allow_html=True)
