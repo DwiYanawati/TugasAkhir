@@ -343,14 +343,14 @@ if model is not None:
             
             if btn_trigger:
                 st.write("")
-                st.subheader("Detail Klasifikasi & Kepercayaan")
+                st.subheader("Detail Klasifikasi & Tingkat Kepercayaan")
                 if len(results[0].boxes) > 0:
                     for i, box in enumerate(results[0].boxes):
                         class_id = int(box.cls[0])
                         class_name = results[0].names[class_id]
                         confidence = float(box.conf[0])
                         st.markdown(
-                            f'<div class="detection-badge">Objek #{i+1} : <b>{class_name}</b> — Confidence Score: <b>{(confidence*100):.2f}%</b></div>', 
+                            f'<div class="detection-badge">Jenis Penyakit #{i+1} : <b>{class_name}</b> — Confidence Score: <b>{(confidence*100):.2f}%</b></div>', 
                             unsafe_allow_html=True
                         )
                 else:
