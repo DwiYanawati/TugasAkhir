@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 from PIL import Image
 import os
+import base64
 from ultralytics import YOLO
 from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, RTCConfiguration
 
@@ -13,6 +14,13 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed" 
 )
+
+# Fungsi Helper untuk mengubah gambar lokal menjadi Base64 agar bisa dibaca HTML Streamlit
+def get_image_base64(path):
+    if os.path.exists(path):
+        with open(path, "rb") as image_file:
+            return base64.b64encode(image_file.read()).decode()
+    return None
 
 # 2. SUNTIKAN CSS PREMIUM
 st.markdown("""
@@ -95,7 +103,7 @@ st.markdown("""
         padding-bottom: 8px;
     }
 
-    /* KOTAK PUTIH PANJANG PREMIUM UNTUK PENYAKIT */
+    /* KOTAK PUTIH PANJANG PREMIUM TEMPAT PENYAKIT */
     .disease-container-box {
         background-color: #FFFFFF;
         border-radius: 16px;
@@ -105,7 +113,7 @@ st.markdown("""
         margin-bottom: 20px;
         display: flex;
         align-items: center;
-        gap: 20px;
+        gap: 25px;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     
@@ -116,8 +124,8 @@ st.markdown("""
     
     .disease-img-wrapper {
         flex: 1;
-        min-width: 150px;
-        max-width: 200px;
+        min-width: 160px;
+        max-width: 220px;
     }
 
     .disease-img-wrapper img {
@@ -126,6 +134,7 @@ st.markdown("""
         border-radius: 10px;
         object-fit: cover;
         display: block;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
 
     .disease-text-wrapper {
@@ -245,7 +254,6 @@ if model is not None:
         st.markdown('<h1 class="hero-title">🌿SoyLeaf-Guard</h1>', unsafe_allow_html=True)
         st.markdown('<p class="hero-sub">Sistem Identifikasi Dini Penyakit Daun Kedelai</p>', unsafe_allow_html=True)
         
-        # 1. Teks Penjelasan Awal Secara Garis Besar
         st.markdown("""
         <p class="info-text">
         Kedelai (<i>Glycine max L.</i>) merupakan tanaman kacang-kacangan kaya nutrisi yang berfungsi sebagai sumber protein nabati utama bagi masyarakat, 
@@ -291,15 +299,21 @@ if model is not None:
             }
         ]
 
-        # LOOPING TOTAL: Gambar dan Teks dipaksa masuk menggunakan tag HTML murni agar menyatu sempurna dalam kotak putih
+        # PROSES PEMBUNGKUSAN TOTAL (Gambar base64 + Teks di dalam satu div)
         for d in diseases:
-            # Menggunakan skema fallback jika file gambar tidak ditemukan di lokal
-            img_src = d["filename"] if os.path.exists(d["filename"]) else ""
+            img_base64 = get_image_base64(d["filename"])
+            
+            if img_base64:
+                # Jika gambar ditemukan, render langsung dengan string base64 data URI
+                img_tag = f"<img src='data:image/jpeg;base64,{img_base64}' alt='{d['title']}' />"
+            else:
+                # Fallback jika file gambar tidak ditemukan di root folder proyek Anda
+                img_tag = "<div style='background:#EEF5F2; padding:30px 10px; border-radius:10px; color:#1F6F5F; font-weight:bold; text-align:center; font-size:0.9rem;'>File Gambar<br>Tidak Ketemu</div>"
             
             disease_html = f"""
             <div class="disease-container-box">
                 <div class="disease-img-wrapper">
-                    {"<img src='app/static/" + d["filename"] + "' />" if img_src else "<div style='background:#EEF5F2; padding:20px; border-radius:8px; color:#1F6F5F; font-weight:bold; text-align:center;'>No Image</div>"}
+                    {img_tag}
                 </div>
                 <div class="disease-text-wrapper">
                     <h3 class="disease-box-title">{d["title"]}</h3>
