@@ -157,18 +157,8 @@ st.markdown("""
         margin: 0px;
     }
     
-    /* GAYA VISUAL LANGKAH PENGGUNAAN */
-    .single-step-box {
-        background-color: #FFFFFF;
-        border-radius: 14px;
-        padding: 22px;
-        border: 1px solid #E2EFEA;
-        border-left: 5px solid #1F6F5F;
-        box-shadow: 0 4px 15px rgba(31, 111, 95, 0.04);
-        margin-bottom: 30px;
-    }
-    
-    .step-title-text {
+    /* GRID KARTU METODOLOGI ALUR */
+    .step-section-title {
         color: #1F6F5F;
         font-weight: 700;
         font-size: 1.15rem;
@@ -178,16 +168,41 @@ st.markdown("""
         gap: 8px;
     }
 
-    .step-list {
-        margin: 0;
-        padding-left: 20px;
+    .grid-step-container {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 30px;
     }
 
-    .step-list li {
-        margin-bottom: 12px;
-        color: #2F3E3A;
-        font-size: 0.98rem;
+    .step-card {
+        background-color: #FFFFFF;
+        border: 1px solid #E2EFEA;
+        border-top: 4px solid #1F6F5F;
+        border-radius: 12px;
+        padding: 18px;
+        flex: 1;
+        box-shadow: 0 4px 12px rgba(31, 111, 95, 0.03);
+    }
+
+    .step-number {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #2FA084;
+        margin-bottom: 8px;
+    }
+
+    .step-card-title {
+        font-weight: 700;
+        color: #1F6F5F;
+        font-size: 1rem;
+        margin-bottom: 8px;
+    }
+
+    .step-card-body {
+        color: #4A5551;
+        font-size: 0.9rem;
         line-height: 1.5;
+        text-align: justify;
     }
     
     /* Tombol Eksekusi */
@@ -270,7 +285,7 @@ if model is not None:
 
         st.markdown('<div class="section-header">Jenis Penyakit Daun Kedelai</div>', unsafe_allow_html=True)
 
-        # 2. Data Jenis Penyakit Daun Kedelai
+        # Data Jenis Penyakit Daun Kedelai
         diseases = [
             {
                 "title": "1. Penyakit Karat Daun (Phakopsora pachyrhizi)",
@@ -304,10 +319,8 @@ if model is not None:
             img_base64 = get_image_base64(d["filename"])
             
             if img_base64:
-                # Jika gambar ditemukan, render langsung dengan string base64 data URI
                 img_tag = f"<img src='data:image/jpeg;base64,{img_base64}' alt='{d['title']}' />"
             else:
-                # Fallback jika file gambar tidak ditemukan di root folder proyek Anda
                 img_tag = "<div style='background:#EEF5F2; padding:30px 10px; border-radius:10px; color:#1F6F5F; font-weight:bold; text-align:center; font-size:0.9rem;'>File Gambar<br>Tidak Ketemu</div>"
             
             disease_html = f"""
@@ -325,8 +338,28 @@ if model is not None:
 
     # ==================== TAB 2: DETEKSI UPLOAD ====================
     with tab_upload:
-        st.markdown('<div class="section-header">Deteksi Upload Gambar</div>', unsafe_allow_html=True)
-        st.markdown('<div class="single-step-box"><div class="step-title-text">Langkah Penggunaan:</div><ul class="step-list"><li><b>Unggah Citra Daun:</b> Klik area berkas di bawah untuk memasukkan foto daun kedelai (Format: JPG, PNG).</li><li><b>Jalankan Inferensi:</b> Klik tombol hijau <b>"Deteksi Penyakit Daun Kedelai"</b> untuk memicu pemindaian model kecerdasan buatan YOLOv9.</li><li><b>Evaluasi Prediksi:</b> Tinjau area kanan untuk melihat hasil lokalisasi bercak serta akurasi presentase (Confidence Score).</li></ul></div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">Deteksi Komputasi Berbasis Citra Digital</div>', unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="step-section-title">📋 Protokol Operasional Pengujian Dokumen Digital:</div>
+        <div class="grid-step-container">
+            <div class="step-card">
+                <div class="step-number">01</div>
+                <div class="step-card-title">Pengunggahan Spesimen</div>
+                <div class="step-card-body">Unggah data input berupa citra digital daun kedelai melalui kompartemen berkas yang tersedia. Format ekstensi yang didukung secara valid meliputi ekstensi standardisasi <b>JPG</b> atau <b>PNG</b>.</div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">02</div>
+                <div class="step-card-title">Inisiasi Proses Inferensi</div>
+                <div class="step-card-body">Tekan tombol eksekusi <b>"Deteksi Penyakit Daun"</b> untuk menstimulasi jaringan arsitektur model kecerdasan buatan YOLO dalam melakukan proses kalkulasi dan ekstraksi fitur fungsional.</div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">03</div>
+                <div class="step-card-title">Analisis Parameter Output</div>
+                <div class="step-card-body">Lakukan evaluasi terhadap visualisasi interpretasi model di panel kanan guna mengamati lokalisasi sebaran lesi patogen beserta nilai derajat keandalan matematis (<i>Confidence Score</i>).</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
             
         uploaded_file = st.file_uploader("Pilih file gambar daun kedelai:", type=["jpg", "png"])
         
@@ -368,8 +401,28 @@ if model is not None:
 
     # ==================== TAB 3: DETEKSI REAL-TIME ====================
     with tab_realtime:
-        st.markdown('<div class="section-header">Deteksi Kamera Real-Time</div>', unsafe_allow_html=True)
-        st.markdown('<div class="single-step-box"><div class="step-title-text">Langkah Penggunaan:</div><ul class="step-list"><li><b>Izinkan Akses Perangkat:</b> Pastikan browser diberikan izin penuh untuk mengakses hardware webcam laptop Anda.</li><li><b>Mulai Deteksi:</b> Tekan tombol <b>"START"</b> pada jendela pemutar WebRTC untuk mengaktifkan pemindaian video langsung.</li><li><b>Deteksi Otomatis:</b> Hadapkan sisi fisik daun kedelai secara sejajar di depan lensa kamera hingga deteksi otomatis muncul tanpa kotak pembatas.</li></ul></div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">Deteksi Sekuensial Berbasis Aliran Video Real-Time</div>', unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="step-section-title">📋 Protokol Operasional Pemindaian Dinamis:</div>
+        <div class="grid-step-container">
+            <div class="step-card">
+                <div class="step-number">01</div>
+                <div class="step-card-title">Autentikasi Hak Akses</div>
+                <div class="step-card-body">Berikan otorisasi penuh pada peramban (browser) untuk mengakses subsistem penangkap gambar/hardware webcam guna menjamin transmisi data visual berjalan tanpa hambatan.</div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">02</div>
+                <div class="step-card-title">Aktivasi Aliran Data</div>
+                <div class="step-card-body">Tekan instruksi perintah <b>"START"</b> pada antarmuka pemutar WebRTC untuk mengaktifkan pemindaian matriks piksel video secara kontinu dan aktual.</div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">03</div>
+                <div class="step-card-title">Penyelarasan Objek</div>
+                <div class="step-card-body">Posisikan bidang geometri daun kedelai secara tegak lurus dan sejajar di depan lensa sensor kamera hingga arsitektur mendeteksi gejala secara otomatis melalui kotak pembatas (<i>bounding box</i>).</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
             
         col_cam1, col_cam2 = st.columns([2, 1], gap="large")
         with col_cam1:
