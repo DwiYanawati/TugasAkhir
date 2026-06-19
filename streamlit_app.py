@@ -14,7 +14,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed" 
 )
 
-# 2. SUNTIKAN CSS PREMIUM (Kombinasi Warna 1F6F5F, 2FA084, 6FCF97)
+# 2. SUNTIKAN CSS PREMIUM (Kombinasi Warna Modern & Kotak Timbul Bayangan)
 st.markdown("""
     <style>
     /* Background Global Modern */
@@ -52,14 +52,14 @@ st.markdown("""
         border: none !important;
     }
     
-    /* Efek Hover Menu (Menggunakan Warna 6FCF97) */
+    /* Efek Hover Menu */
     .stTabs [data-baseweb="tab"]:hover {
         background-color: #6FCF97;
         color: #1F6F5F;
         transform: translateY(-1px);
     }
     
-    /* Menu Aktif Terpilih (Menggunakan Warna 1F6F5F) */
+    /* Menu Aktif Terpilih */
     .stTabs [aria-selected="true"] {
         background-color: #1F6F5F !important;
         color: #FFFFFF !important;
@@ -85,27 +85,23 @@ st.markdown("""
         font-weight: 500;
     }
     
-    /* Subjudul Bagian (Menggunakan Warna 2FA084) */
+    /* Subjudul Bagian */
     .section-header {
-        color: #2FA084;
+        color: #1F6F5F;
         font-weight: 700;
         font-size: 1.6rem;
         margin-top: 35px;
         margin-bottom: 20px;
         padding-left: 5px;
+        border-bottom: 2px solid #E2EFEA;
+        padding-bottom: 8px;
     }
 
     .info-text {
         color: #2F3E3A;
         line-height: 1.7;
         font-size: 1.05rem;
-    }
-    .info-text ul {
-        margin-top: 8px;
-        padding-left: 20px;
-    }
-    .info-text li {
-        margin-bottom: 6px;
+        text-align: justify;
     }
 
     /* KOTAK TIMBUL DENGAN BAYANGAN HALUS (CARD DISEASES) */
@@ -113,14 +109,14 @@ st.markdown("""
         background-color: #FFFFFF;
         padding: 24px;
         border-radius: 16px;
-        box-shadow: 0 10px 25px rgba(31, 111, 95, 0.07); /* Efek Timbul Bayangan */
+        box-shadow: 0 10px 25px rgba(31, 111, 95, 0.07);
         border: 1px solid #E2EFEA;
-        border-left: 5px solid #2FA084; /* Aksen warna tepi kiri */
-        margin-bottom: 30px;
+        border-left: 5px solid #2FA084;
+        margin-bottom: 25px;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .disease-card-box:hover {
-        transform: translateY(-3px); /* Efek melayang saat kursor di atas kotak */
+        transform: translateY(-3px);
         box-shadow: 0 14px 30px rgba(31, 111, 95, 0.12);
     }
     .disease-title {
@@ -144,7 +140,6 @@ st.markdown("""
     }
     div.stButton > button:first-child:hover {
         background-color: #1F6F5F !important;
-        box-shadow: 0 6px 15px rgba(31, 111, 95, 0.3) !important;
     }
     
     /* Badge Hasil */
@@ -161,7 +156,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 3. DEKLARASI NAVBAR HORIZONTAL ATAS WEBSITE
+# 3. NAVBAR HORIZONTAL ATAS WEBSITE
 tab_home, tab_upload, tab_realtime = st.tabs([
     "Halaman Utama", 
     "Deteksi via Upload Gambar", 
@@ -188,71 +183,71 @@ class YoloVideoTransformer(VideoTransformerBase):
         img = frame.to_ndarray(format="bgr24")
         return self.model(img, conf=0.25)[0].plot()
 
+
 if model is not None:
     # ==================== TAB 1: HALAMAN UTAMA ====================
     with tab_home:
         st.markdown('<h1 class="hero-title">SoyLeaf-Guard</h1>', unsafe_allow_html=True)
         st.markdown('<p class="hero-sub">Sistem Komputasi Pakar Identifikasi Dini Penyakit Daun Kedelai</p>', unsafe_allow_html=True)
         
-        # Bagian A: Informasi Sistem
-        st.markdown('<div class="section-header">Informasi Sistem</div>', unsafe_allow_html=True)
+        # 1. Kasus Penyakit Daun Kedelai (Narasi Ilmiah Bab 1 Skripsi)
+        st.markdown('<div class="section-header">Kasus & Urgensi Penyakit Daun Kedelai</div>', unsafe_allow_html=True)
         st.markdown("""
-        <div class="info-text">
-        Menu informasi sistem berfungsi untuk memberikan penjelasan kepada pengguna mengenai sistem yang digunakan. 
-        Informasi yang ditampilkan pada menu ini meliputi:
-        <ul>
-            <li><b>Model yang digunakan:</b> YOLOv9.</li>
-            <li><b>Framework pengembangan:</b> Streamlit.</li>
-            <li><b>Fitur utama sistem:</b> Deteksi berbasis unggah gambar dan kamera real-time.</li>
-            <li><b>Tentang aplikasi:</b> SoyLeaf-Guard dirancang untuk membantu identifikasi penyakit daun kedelai secara instan guna mendukung produktivitas pertanian.</li>
-        </ul>
-        </div>
+        <p class="info-text">
+        Tanaman kedelai (<i>Glycine max L.</i>) merupakan salah satu komoditas pangan strategis yang memiliki peran penting dalam pemenuhan 
+        kebutuhan protein nabati masyarakat. Namun, dalam proses budidayanya, produktivitas tanaman seringkali mengalami penurunan signifikan 
+        akibat serangan berbagai patogen penyakit yang menyerang organ daun. Infeksi makroskopis seperti bercak, karat, hingga kerusakan jaringan 
+        klorofil dapat menurunkan laju fotosintesis, menghambat pengisian polong, hingga memicu risiko gagal panen masal.
+        </p>
+        <p class="info-text">
+        Metode identifikasi konvensional yang mengandalkan pengamatan visual manual oleh petani seringkali subjektif dan membutuhkan waktu yang 
+        cukup lama, sehingga penanganan sering terlambat dilakukan. Oleh karena itu, pendekatan berbasis teknologi komputasi cerdas deep learning 
+        objek deteksi dirancang dalam penelitian ini untuk mengenali ragam spasial dan melokalisasi tingkat serangan penyakit secara instan, 
+        presisi, dan efisien.
+        </p>
         """, unsafe_allow_html=True)
 
-        # Bagian B: Karakteristik Penyakit (Kotak Timbul + Link Gambar Lokal)
-        st.markdown('<div class="section-header">Karakteristik Visual Penyakit Daun Kedelai</div>', unsafe_allow_html=True)
+        # 2. Jenis Penyakit Daun Kedelai (Katalog Kotak Timbul + Link Gambar Lokal Anda)
+        st.markdown('<div class="section-header">Jenis Penyakit Daun Kedelai</div>', unsafe_allow_html=True)
         
-        # Struktur Data Pemanggilan File Gambar Lokal Anda
         diseases = [
             {
                 "title": "1. Karat Daun (Soybean Rust)",
-                "desc": "Disebabkan oleh jamur <i>Phakopsora pachyrhizi</i>. Gejala ditandai dengan bercak pustul kecil berwarna cokelat kelabu atau kemerahan di permukaan bawah daun, menyebabkan daun menguning dan gugur pra-matang.",
-                "filename": "karat.jpg"
+                "desc": "Disebabkan oleh infeksi jamur patogen <i>Phakopsora pachyrhizi</i>. Gejala awal ditandai dengan munculnya bercak pustul kecil berwarna cokelat kelabu atau kemerahan di permukaan bawah daun, mengakibatkan klorosis jaringan sekitar hingga daun gugur pra-matang.",
+                "filename": "karatdaun.jpg"
             },
             {
                 "title": "2. Pustul Bakteri (Bacterial Pustule)",
-                "desc": "Disebabkan oleh bakteri <i>Xanthomonas axonopodis pv. glycines</i>. Ditandai bintik kecil berwarna kemerahan yang menonjol di bagian tengah, umumnya dikelilingi oleh area kuning (halo) di sekitarnya.",
-                "filename": "pustul.jpg"
+                "desc": "Disebabkan oleh agen infeksi bakteri <i>Xanthomonas axonopodis pv. glycines</i>. Karakteristik visual dicirikan oleh bintik kecil berwarna kemerahan yang mengalami elevasi menonjol di bagian tengah, umumnya dikelilingi oleh cincin kuning halus (halo) di sekeliling area infeksi.",
+                "filename": "pustulbakteri.jpg"
             },
             {
                 "title": "3. Embun Bulu (Downy Mildew)",
-                "desc": "Disebabkan oleh cendawan <i>Peronospora manshurica</i>. Permukaan atas daun menunjukkan bercak hijau pucat atau kuning, sedangkan permukaan bawah daun ditumbuhi kapang halus berwarna abu-abu.",
-                "filename": "embun.jpg"
+                "desc": "Disebabkan oleh cendawan oomycete <i>Peronospora manshurica</i>. Permukaan atas helaian daun memperlihatkan sebaran bercak hijau pucat atau kuning kelabu, sedangkan pada area permukaan bawah daun ditumbuhi oleh kumpulan massa konidia halus berwarna abu-abu keunguan.",
+                "filename": "embunbulu.jpg"
             },
             {
                 "title": "4. Bercak Target (Target Spot)",
-                "desc": "Disebabkan oleh jamur <i>Corynespora cassiicola</i>. Gejala berupa bercak cokelat melingkar besar dengan pola lingkaran konsentris berlapis menyerupai sasaran tembak.",
-                "filename": "bercak.jpg"
+                "desc": "Disebabkan oleh jamur nekrotrofik <i>Corynespora cassiicola</i>. Gejala ditandai dengan pembentukan lesi atau bercak cokelat melingkar berdiameter besar yang menampilkan pola struktur lingkaran konsentris berlapis menyerupai bentuk papan sasaran tembak.",
+                "filename": "bercaktarget.jpg"
             },
             {
                 "title": "5. Daun Sehat (Healthy Leaf)",
-                "desc": "Kondisi daun kontrol pembanding dengan permukaan bersih, pigmen hijau merata, dan bebas dari gejala infeksi patogen maupun serangan mikroorganisme merugikan.",
-                "filename": "sehat.jpg"
+                "desc": "Kondisi kontrol pembanding dimana organ daun memiliki pigmen klorofil hijau merata yang homogen, bertekstur mulus, serta bersih sepenuhnya dari segala jenis bentuk nekrosis, klorosis, maupun degradasi akibat serangan organisme pengganggu tanaman.",
+                "filename": "healthy.jpg"
             }
         ]
 
-        # Menampilkan per penyakit ke dalam Kotak Timbul berpola Kolom Horizontal
+        # Perulangan untuk membuat kotak timbul otomatis
         for d in diseases:
             st.markdown('<div class="disease-card-box">', unsafe_allow_html=True)
             col_img, col_txt = st.columns([1, 2.5], gap="large")
             
             with col_img:
-                # Cek ketersediaan file gambar lokal di folder berkas Anda
                 if os.path.exists(d["filename"]):
                     st.image(d["filename"], use_container_width=True)
                 else:
-                    # Menampilkan area penampung rapi jika berkas gambar belum dimasukkan ke folder
-                    st.warning(f"File '{d['filename']}' tidak ditemukan di direktori.")
+                    st.warning(f"Berkas '{d['filename']}' tidak ditemukan di folder utama.")
                     
             with col_txt:
                 st.markdown(f'<div class="disease-title">{d["title"]}</div>', unsafe_allow_html=True)
@@ -309,7 +304,7 @@ if model is not None:
         with col_cam1:
             st.subheader("Aliran Video WebRTC")
             webrtc_streamer(
-                key="yolov9-forest-theme",
+                key="yolov9-clean-final",
                 video_transformer_factory=YoloVideoTransformer,
                 rtc_configuration=RTC_CONFIGURATION,
                 media_stream_constraints={"video": True, "audio": False}
