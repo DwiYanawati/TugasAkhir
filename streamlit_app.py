@@ -95,11 +95,31 @@ st.markdown("""
         padding-bottom: 8px;
     }
 
+    /* KOTAK RINGKASAN LATAR BELAKANG (SKRIPSI STYLE) */
+    .bg-skripsi-box {
+        background-color: #FFFFFF;
+        border-radius: 14px;
+        padding: 25px;
+        border: 1px solid #E2EFEA;
+        box-shadow: 0 4px 15px rgba(31, 111, 95, 0.04);
+        margin-bottom: 30px;
+    }
+
+    .info-title-skripsi {
+        color: #1F6F5F;
+        font-weight: 700;
+        font-size: 1.15rem;
+        margin-bottom: 12px;
+        border-left: 4px solid #2FA084;
+        padding-left: 10px;
+    }
+
     .info-text {
         color: #2F3E3A;
         line-height: 1.7;
-        font-size: 1.05rem;
+        font-size: 1rem;
         text-align: justify;
+        margin-bottom: 15px;
     }
 
     /* KOTAK TIMBUL PENYAKIT (HORIZONTAL ROW DESIGN) */
@@ -118,10 +138,10 @@ st.markdown("""
         box-shadow: 0 12px 25px rgba(31, 111, 95, 0.1);
     }
 
-    /* WADAH FOTO LANDSCAPE DISAMPING - UKURAN MODERAT KECIL */
+    /* WADAH FOTO LANDSCAPE DISAMPING - KECIL */
     .image-landscape-wrapper {
-        max-width: 240px; /* Ukuran diperkecil secara presisi */
-        height: 150px;    /* Kunci rasio landscape */
+        max-width: 240px;
+        height: 150px;
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 3px 10px rgba(0,0,0,0.06);
@@ -246,24 +266,37 @@ if model is not None:
         st.markdown('<h1 class="hero-title">SoyLeaf-Guard</h1>', unsafe_allow_html=True)
         st.markdown('<p class="hero-sub">Sistem Komputasi Pakar Identifikasi Dini Penyakit Daun Kedelai</p>', unsafe_allow_html=True)
         
-        # 1. Kasus Penyakit Daun Kedelai
-        st.markdown('<div class="section-header">Kasus & Urgensi Penyakit Daun Kedelai</div>', unsafe_allow_html=True)
+        # 1. Pembahasan Latar Belakang Masalah (Disesuaikan Garis Besar Skripsi Dwi)
+        st.markdown('<div class="section-header">1.1 Latar Belakang & Urgensi Penelitian</div>', unsafe_allow_html=True)
+        
+        st.markdown('<div class="bg-skripsi-box">', unsafe_allow_html=True)
         st.markdown("""
+        <div class="info-title-skripsi">Urgensi Komoditas & Masalah Produktivitas</div>
         <p class="info-text">
-        Tanaman kedelai (<i>Glycine max L.</i>) merupakan salah satu komoditas pangan strategis yang memiliki peran penting dalam pemenuhan 
-        kebutuhan protein nabati masyarakat. Namun, dalam proses budidayanya, produktivitas tanaman seringkali mengalami penurunan signifikan 
-        akibat serangan berbagai patogen penyakit yang menyerang organ daun. Infeksi makroskopis seperti bercak, karat, hingga kerusakan jaringan 
-        klorofil dapat menurunkan laju fotosintesis, menghambat pengisian polong, hingga memicu risiko gagal panen masal.
+        Kedelai (<i>Glycine max L.</i>) merupakan komoditas pangan strategis global penyedia protein dan minyak nabati terbesar (Chiozza et al., 2020; Liu, 2004). 
+        Di Indonesia, permintaan domestik diproyeksikan melonjak hingga 2,75 juta ton pada tahun 2025, namun kapasitas produksi nasional masih rendah 
+        akibat serangan Organisme Pengganggu Tanaman (OPT) pada organ daun (BPS, 2025; Badan Pangan Nasional). Penyakit utama yang merugikan meliputi 
+        Karat Daun (<i>Phakopsora pachyrhizi</i>), Pustul Bakteri (<i>Xanthomonas axonopodis</i>), Embun Bulu (<i>Peronospora manshurica</i>), dan Bercak Target (<i>Corynespora cassiicola</i>) (Atman, 2022).
         </p>
+        
+        <div class="info-title-skripsi">Kelemahan Identifikasi Konvensional & Solusi Alur Komputasi</div>
         <p class="info-text">
-        Metode identifikasi konvensional yang mengandalkan pengamatan visual manual oleh petani seringkali subjektif dan membutuhkan waktu yang 
-        cukup lama, sehingga penanganan sering terlambat dilakukan. Oleh karena itu, pendekatan berbasis teknologi komputasi cerdas deep learning 
-        objek deteksi dirancang dalam penelitian ini untuk mengenali ragam spasial dan melokalisasi tingkat serangan penyakit secara instan, 
-        presisi, dan efisien.
+        Metode diagnosis visual konvensional di lapangan sangat subjektif, lambat, dan rentan salah identifikasi (Rahmawati et al., 2025). 
+        Sebagai solusi, algoritma <i>You Only Look Once</i> (YOLO) hadir menawarkan arsitektur <i>single-stage</i> yang jauh lebih cepat, hemat biaya komputasi, 
+        dan presisi dibandingkan model CNN konvensional lainnya (Redmon et al., 2016; Bao et al., 2023).
+        </p>
+
+        <div class="info-title-skripsi">Kebaruan Teknologi (Novelty YOLOv9)</div>
+        <p class="info-text">
+        Penelitian ini menerapkan varian mutakhir <b>YOLOv9</b> yang mengintegrasikan fitur <i>Programmable Gradient Information</i> (PGI) dan 
+        <i>Generalized Efficient Layer Aggregation Network</i> (GELAN) untuk mempertahankan akurasi informasi data kompleks tanpa kehilangan gradien (Wang et al., 2024). 
+        Mengingat studi terdahulu masih berfokus terbatas pada tanaman tomat, padi, dan kopi (Choiriyah & Supriyanto, 2025; Fauzi et al., 2024; Ardiansyah & Hasan, 2023), 
+        aplikasi <b>SoyLeaf-Guard</b> ini hadir sebagai kebaruan sistem pakar pertama yang fokus mengoptimalisasi deteksi dini penyakit daun kedelai secara instan dan akurat.
         </p>
         """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-        # 2. Jenis Penyakit Daun Kedelai (Layout Gambar di Samping Teks)
+        # 2. Jenis Penyakit Daun Kedelai (Layout Gambar Kecil di Samping Teks)
         st.markdown('<div class="section-header">Jenis Penyakit Daun Kedelai</div>', unsafe_allow_html=True)
         
         diseases = [
@@ -297,8 +330,6 @@ if model is not None:
         # Loop Penyakit Berjejer ke Bawah dengan Gambar di Samping Kiri
         for d in diseases:
             st.markdown('<div class="disease-vertical-box">', unsafe_allow_html=True)
-            
-            # Membuat layout kolom internal (Kolom Kiri untuk Gambar, Kolom Kanan untuk Teks)
             inner_col1, inner_col2 = st.columns([1, 4])
             
             with inner_col1:
