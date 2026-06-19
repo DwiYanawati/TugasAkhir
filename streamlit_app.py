@@ -238,7 +238,6 @@ class YoloVideoTransformer(VideoTransformerBase):
     def __init__(self): self.model = model
     def transform(self, frame):
         img = frame.to_ndarray(format="bgr24")
-        # Ditambahkan Bounding Box (boxes=True)
         return self.model(img, conf=0.25)[0].plot(boxes=True)
 
 
@@ -266,31 +265,31 @@ if model is not None:
         # ====== SELESAI PENJELASAN AWAL: DI SINI JUDUL BARU DITAMBAHKAN ======
         st.markdown('<div class="section-header">Jenis Penyakit Daun Kedelai</div>', unsafe_allow_html=True)
 
-        # 2. Jenis Penyakit Daun Kedelai (Layout Gambar Kecil di Samping Teks)
+        # 2. Jenis Penyakit Daun Kedelai yang Telah Diperbaharui
         diseases = [
             {
-                "title": "1. Karat Daun (Soybean Rust)",
-                "desc": "Disebabkan oleh infeksi jamur patogen Phakopsora pachyrhizi. Gejala awal ditandai dengan munculnya bercak pustul kecil berwarna cokelat kelabu atau kemerahan di permukaan bawah daun, mengakibatkan klorosis jaringan sekitar hingga daun gugur pra-matang.",
+                "title": "1. Penyakit Karat Daun (Phakopsora pachyrhizi)",
+                "desc": "Merupakan penyakit jamur terpenting pada tanaman kedelai, khususnya saat musim kemarau, yang mampu memicu risiko kehilangan hasil panen sebesar 30–60% serta menurunkan kualitas biji. Jamur ini berkembang dengan membentuk struktur uredinia (berwarna cokelat tua) dan telia (berwarna lebih gelap) pada helaian jaringan daun.",
                 "filename": "karatdaun.jpg"
             },
             {
-                "title": "2. Pustul Bakteri (Bacterial Pustule)",
-                "desc": "Disebabkan oleh agen infeksi bakteri Xanthomonas axonopodis pv. glycines. Karakteristik visual dicirikan oleh bintik kecil berwarna kemerahan yang mengalami elevasi menonjol di bagian tengah, umumnya dikelilingi oleh cincin kuning halus (halo) di sekeliling area infeksi.",
+                "title": "2. Penyakit Pustul Bakteri (Xanthomonas axonopodis pv. glycines)",
+                "desc": "Penyakit infeksi bakteri yang menjadi faktor utama penurunan produktivitas kedelai nasional. Gejalanya dicirikan oleh munculnya bintik kecil hijau pucat di kedua sisi daun, yang kemudian berkembang menjadi benjolan (pustul) cokelat muda di permukaan bawah daun. Pada stadium lanjut, bercak nekrotik ini menyatu, mudah robek oleh angin hingga daun berlubang dan gugur.",
                 "filename": "pustulbakteri.jpg"
             },
             {
-                "title": "3. Embun Bulu (Downy Mildew)",
-                "desc": "Disebabkan oleh cendawan oomycete Peronospora manshurica. Permukaan atas helaian daun memperlihatkan sebaran bercak hijau pucat atau kuning kelabu, sedangkan pada area permukaan bawah daun ditumbuhi oleh kumpulan massa konidia halus berwarna abu-abu keunguan.",
+                "title": "3. Penyakit Embun Bulu (Peronospora manshurica)",
+                "desc": "Penyakit endemik global yang di Indonesia tersebar luas di Pulau Jawa dan Sumatera dengan potensi kerugian mencapai 6–18%. Gejala awal diidentifikasi melalui munculnya bercak kuning kehujauan pada permukaan atas helaian daun, yang perlahan bertransisi menjadi kelabu hingga cokelat tua serta mengganggu integritas mutu benih.",
                 "filename": "embunbulu.jpg"
             },
             {
-                "title": "4. Bercak Target (Target Spot)",
-                "desc": "Disebabkan oleh jamur nekrotrofik Corynespora cassiicola. Gejala ditandai dengan pembentukan lesi atau bercak cokelat melingkar berdiameter besar yang menampilkan pola struktur lingkaran konsentris berlapis menyerupai bentuk papan sasaran tembak.",
+                "title": "4. Penyakit Bercak Target (Corynespora cassiicola)",
+                "desc": "Disebabkan oleh jamur yang menyerang sejak fase awal pertumbuhan vegetatif hingga pembentukan polong. Memiliki karakteristik lesi bercak cokelat kemerahan berdiameter 10–15 mm yang membentuk zonasi melingkar konsentris menyerupai papan target. Patogen tangguh ini bersifat kosmopolitan dan mampu bertahan hidup di sisa tanaman maupun tanah selama lebih dari dua tahun.",
                 "filename": "bercaktarget.jpg"
             },
             {
-                "title": "5. Daun Sehat (Healthy Leaf)",
-                "desc": "Kondisi kontrol pembanding dimana organ daun memiliki pigmen klorofil hijau merata yang homogen, bertekstur mulus, serta bersih sepenuhnya dari segala jenis bentuk nekrosis, klorosis, maupun degradasi akibat serangan organisme pengganggu tanaman.",
+                "title": "5. Daun Sehat (Healthy Leaf) - Kontrol Pembanding",
+                "desc": "Kondisi kontrol pembanding dimana organ vegetatif daun kedelai memiliki pigmen klorofil hijau merata yang homogen, berstruktur mulus, serta bersih sepenuhnya dari tanda-tanda nekrosis, klorosis, bintik pustul, maupun kerusakan jaringan akibat paparan patogen.",
                 "filename": "healthy.jpg"
             }
         ]
@@ -336,7 +335,6 @@ if model is not None:
                     img_array = np.array(image)
                     img_bgr = cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR)
                     results = model(img_bgr)
-                    # Ditambahkan Bounding Box (boxes=True)
                     result_img = results[0].plot(boxes=True)
                     result_img_rgb = cv2.cvtColor(result_img, cv2.COLOR_BGR2RGB)
                     st.image(result_img_rgb, use_container_width=True)
