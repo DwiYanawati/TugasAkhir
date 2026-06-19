@@ -137,16 +137,6 @@ st.markdown("""
         transform: translateY(-2px);
         box-shadow: 0 12px 25px rgba(31, 111, 95, 0.1);
     }
-
-    /* WADAH FOTO LANDSCAPE DISAMPING - KECIL */
-    .image-landscape-wrapper {
-        max-width: 240px;
-        height: 150px;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.06);
-        border: 1px solid #E2EFEA;
-    }
     
     .image-landscape-wrapper img {
         width: 100% !important;
@@ -235,7 +225,7 @@ st.markdown("""
 # 3. NAVBAR HORIZONTAL ATAS WEBSITE
 tab_home, tab_upload, tab_realtime = st.tabs([
     "Halaman Utama", 
-    "Deteksi via Upload Gambar", 
+    "Deteksi Upload Gambar", 
     "Deteksi Kamera Real-Time"
 ])
 
@@ -263,10 +253,10 @@ class YoloVideoTransformer(VideoTransformerBase):
 if model is not None:
     # ==================== TAB 1: HALAMAN UTAMA ====================
     with tab_home:
-        st.markdown('<h1 class="hero-title">SoyLeaf-Guard</h1>', unsafe_allow_html=True)
-        st.markdown('<p class="hero-sub">Sistem Komputasi Pakar Identifikasi Dini Penyakit Daun Kedelai</p>', unsafe_allow_html=True)
+        st.markdown('<h1 class="hero-title">🌿SoyLeaf-Guard</h1>', unsafe_allow_html=True)
+        st.markdown('<p class="hero-sub">Sistem Identifikasi Dini Penyakit Daun Kedelai</p>', unsafe_allow_html=True)
         
-        # 1. Teks Penjelasan Awal Secara Garis Besar (Gabungan Esensi Bab III Skripsi Dwi)
+        # 1. Teks Penjelasan Awal Secara Garis Besar
         st.markdown('<div class="bg-skripsi-box" style="margin-top: 20px;">', unsafe_allow_html=True)
         st.markdown("""
         <p class="info-text">
