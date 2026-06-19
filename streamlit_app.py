@@ -326,7 +326,7 @@ if model is not None:
     # ==================== TAB 2: DETEKSI UPLOAD ====================
     with tab_upload:
         st.markdown('<div class="section-header">Deteksi Upload Gambar</div>', unsafe_allow_html=True)
-        st.markdown('<div class="single-step-box"><div class="step-title-text">Langkah Penggunaan:</div><ul class="step-list"><li><b>Unggah Citra Daun:</b> Klik area berkas di bawah untuk memasukkan foto daun kedelai (Format: JPG, PNG).</li><li><b>Jalankan Inferensi:</b> Klik tombol hijau <b>"Deteksi Penyakit Daun Kedelai"</b> untuk memicu pemindaian model kecerdasan buatan YOLOv9.</li><li><b>Evaluasi Prediksi:</b> Tinjau area kanan untuk melihat hasil lokalisasi bercak serta akurasi presentase (Confidence Score).</li></ul></div>', unsafe_allow_html=True)
+        st.markdown('<div class="single-step-box"><div class="step-title-text">Langkah Penggunaan:</div><ul class="step-list"><li><b>Unggah Foto Daun:</b> Klik area unggah berkas untuk memasukkan foto daun kedelai (Format: .JPG atau .PNG).</li><li><b>Mulai Deteksi:</b> Klik tombol <b>"Deteksi Penyakit Daun Kedelai"</b> untuk memulai pemindaian otomatis oleh model YOLOv9.</li><li><b>Lihat Hasil:</b> Periksa area sebelah kanan untuk melihat lokasi penyakit pada daun dan tingkat akurasi prediksi (Confidence Score).</li></ul></div>', unsafe_allow_html=True)
             
         uploaded_file = st.file_uploader("Pilih file gambar daun kedelai:", type=["jpg", "png"])
         
@@ -369,7 +369,7 @@ if model is not None:
     # ==================== TAB 3: DETEKSI REAL-TIME ====================
     with tab_realtime:
         st.markdown('<div class="section-header">Deteksi Kamera Real-Time</div>', unsafe_allow_html=True)
-        st.markdown('<div class="single-step-box"><div class="step-title-text">Langkah Penggunaan:</div><ul class="step-list"><li><b>Izinkan Akses Perangkat:</b> Pastikan browser diberikan izin penuh untuk mengakses hardware webcam laptop Anda.</li><li><b>Mulai Deteksi:</b> Tekan tombol <b>"START"</b> pada jendela pemutar WebRTC untuk mengaktifkan pemindaian video langsung.</li><li><b>Deteksi Otomatis:</b> Hadapkan sisi fisik daun kedelai secara sejajar di depan lensa kamera hingga deteksi otomatis muncul tanpa kotak pembatas.</li></ul></div>', unsafe_allow_html=True)
+        st.markdown('<div class="single-step-box"><div class="step-title-text">Langkah Penggunaan:</div><ul class="step-list"><li><b>Izinkan Kamera:</b> Berikan izin akses webcam pada peramban (browser) Anda saat muncul notifikasi.</li><li><b>Aktifkan Kamera:</b> Tekan tombol <b>"START"</b> pada pemutar WebRTC untuk memulai aliran video langsung.</li><li><b>Pindai Daun:</b> Hadapkan permukaan daun kedelai secara sejajar di depan kamera hingga sistem mendeteksi gejala penyakit secara otomatis.</li></ul></div>', unsafe_allow_html=True)
             
         col_cam1, col_cam2 = st.columns([2, 1], gap="large")
         with col_cam1:
