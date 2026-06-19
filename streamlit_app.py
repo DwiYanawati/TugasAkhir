@@ -95,31 +95,14 @@ st.markdown("""
         padding-bottom: 8px;
     }
 
-    /* KOTAK RINGKASAN LATAR BELAKANG */
-    .bg-skripsi-box {
-        background-color: #FFFFFF;
-        border-radius: 14px;
-        padding: 25px;
-        border: 1px solid #E2EFEA;
-        box-shadow: 0 4px 15px rgba(31, 111, 95, 0.04);
-        margin-bottom: 30px;
-    }
-
-    .info-text {
-        color: #2F3E3A;
-        line-height: 1.7;
-        font-size: 1rem;
-        text-align: justify;
-        margin-bottom: 15px;
-    }
-
-    /* KOTAK TIMBUL PENYAKIT */
+    /* KOTAK TIMBUL PENYAKIT (KOTAK PUTIH PANJANG PREMIUM) */
     .disease-vertical-box {
         background-color: #FFFFFF;
         border-radius: 16px;
-        box-shadow: 0 8px 20px rgba(31, 111, 95, 0.06);
+        box-shadow: 0 6px 18px rgba(31, 111, 95, 0.05);
         border: 1px solid #E2EFEA;
-        padding: 20px;
+        padding: 24px;
+        margin-top: 15px;
         margin-bottom: 20px;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
@@ -131,15 +114,16 @@ st.markdown("""
     
     .image-landscape-wrapper img {
         width: 100% !important;
-        height: 100% !important;
+        height: auto !important;
+        border-radius: 8px;
         object-fit: cover !important;
     }
 
     .disease-box-title {
         color: #1F6F5F;
         font-weight: 700;
-        font-size: 1.25rem;
-        margin-bottom: 8px;
+        font-size: 1.3rem;
+        margin-bottom: 10px;
         text-align: left;
     }
 
@@ -256,16 +240,15 @@ if model is not None:
         khususnya pada area permukaan daun.
         </p>
         <p class="info-text">
-        Secar umum, terdapat empat jenis infeksi penyakit daun utama yang merugikan di lapangan, yaitu Karat Daun (<i>Phakopsora pachyrhizi</i>), 
+        Secara umum, terdapat empat jenis infeksi penyakit daun utama yang merugikan di lapangan, yaitu Karat Daun (<i>Phakopsora pachyrhizi</i>), 
         Pustul Bakteri (<i>Xanthomonas axonopodis</i>), Embun Bulu (<i>Peronospora manshurica</i>), dan Bercak Target (<i>Corynespora cassiicola</i>). 
         Serangan patogen ini dapat memicu klorosis jaringan, kerusakan klorofil, hingga keguguran daun pramatang yang berpotensi menurunkan hasil panen secara signifikan.
         </p>
         """, unsafe_allow_html=True)
 
-        # ====== SELESAI PENJELASAN AWAL: DI SINI JUDUL BARU DITAMBAHKAN ======
         st.markdown('<div class="section-header">Jenis Penyakit Daun Kedelai</div>', unsafe_allow_html=True)
 
-        # 2. Jenis Penyakit Daun Kedelai yang Telah Diperbaharui
+        # 2. Jenis Penyakit Daun Kedelai
         diseases = [
             {
                 "title": "1. Penyakit Karat Daun (Phakopsora pachyrhizi)",
@@ -288,30 +271,43 @@ if model is not None:
                 "filename": "bercaktarget.jpg"
             },
             {
-                "title": "5. Daun Sehat (Healthy Leaf) - Kontrol Pembanding",
+                "title": "5. Daun Sehat (Healthy Leaf)",
                 "desc": "Kondisi kontrol pembanding dimana organ vegetatif daun kedelai memiliki pigmen klorofil hijau merata yang homogen, berstruktur mulus, serta bersih sepenuhnya dari tanda-tanda nekrosis, klorosis, bintik pustul, maupun kerusakan jaringan akibat paparan patogen.",
                 "filename": "healthy.jpg"
             }
         ]
 
-        # Loop Penyakit Berjejer ke Bawah dengan Gambar di Samping Kiri
+        # Loop Penyakit Bersih Menggunakan Wadah Tunggal HTML Berwarna Putih
         for d in diseases:
-            st.markdown('<div class="disease-vertical-box">', unsafe_allow_html=True)
-            inner_col1, inner_col2 = st.columns([1, 4])
+            # Menggunakan gabungan string murni untuk menghindari kebocoran elemen Streamlit di dalam HTML container
+            content_html = f"""
+            <div class="disease-vertical-box">
+                <table style="width:100%; border:none; border-collapse:collapse; background:transparent;">
+                    <tr style="background:transparent; border:none;">
+                        <td style="width:20%; vertical-align:top; border:none; padding-right:20px;">
+                            <div class="image-landscape-wrapper">
+            """
+            st.markdown(content_html, unsafe_allow_html=True)
             
-            with inner_col1:
-                st.markdown('<div class="image-landscape-wrapper">', unsafe_allow_html=True)
-                if os.path.exists(d["filename"]):
-                    st.image(d["filename"], use_container_width=True)
-                else:
-                    st.error("No Image")
-                st.markdown('</div>', unsafe_allow_html=True)
+            # Gambar ditaruh di kolom kiri secara aman
+            if os.path.exists(d["filename"]):
+                st.image(d["filename"], use_container_width=True)
+            else:
+                st.error("No Image")
                 
-            with inner_col2:
-                st.markdown(f'<div class="disease-box-title">{d["title"]}</div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="disease-box-desc">{d["desc"]}</div>', unsafe_allow_html=True)
-                
-            st.markdown('</div>', unsafe_allow_html=True)
+            # Penutup kolom kiri dan beralih ke teks penjelasan di kolom kanan
+            end_html = f"""
+                            </div>
+                        </td>
+                        <td style="width:80%; vertical-align:top; border:none;">
+                            <div class="disease-box-title">{d["title"]}</div>
+                            <div class="disease-box-desc">{d["desc"]}</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            """
+            st.markdown(end_html, unsafe_allow_html=True)
 
     # ==================== TAB 2: DETEKSI UPLOAD ====================
     with tab_upload:
@@ -359,7 +355,7 @@ if model is not None:
     # ==================== TAB 3: DETEKSI REAL-TIME ====================
     with tab_realtime:
         st.markdown('<div class="section-header">Deteksi Kamera Real-Time</div>', unsafe_allow_html=True)
-        st.markdown('<div class="single-step-box"><div class="step-title-text">Langkah Penggunaan:</div><ul class="step-list"><li><b>Izinkan Akses Perangkat:</b> Pastikan browser diberikan izin penuh untuk mengakses hardware webcam laptop Anda.</li><li><b>Mulai Deteksi:</b> Tekan tombol <b>"START"</b> pada jendela pemutar WebRTC untuk mengaktifkan pemindaian video langsung.</li><li><b>Deteksi Otomatis:</b> Hadapkan sisi fisik daun kedelai secara sejajar di depan lensa kamera hingga deteksi otomatis muncul.</li></ul></div>', unsafe_allow_html=True)
+        st.markdown('<div class="single-step-box"><div class="step-title-text">Langkah Penggunaan:</div><ul class="step-list"><li><b>Izinkan Akses Perangkat:</b> Pastikan browser diberikan izin penuh untuk mengakses hardware webcam laptop Anda.</li><li><b>Mulai Deteksi:</b> Tekan tombol <b>"START"</b> pada jendela pemutar WebRTC untuk mengaktifkan pemindaian video langsung.</li><li><b>Deteksi Otomatis:</b> Hadapkan sisi fisik daun kedelai secara sejajar di depan lensa kamera hingga deteksi otomatis muncul tanpa kotak pembatas.</li></ul></div>', unsafe_allow_html=True)
             
         col_cam1, col_cam2 = st.columns([2, 1], gap="large")
         with col_cam1:
