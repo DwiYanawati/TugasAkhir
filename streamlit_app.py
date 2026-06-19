@@ -14,7 +14,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed" 
 )
 
-# 2. SUNTIKAN CSS PREMIUM (Kombinasi Warna Modern & Kotak Timbul Tebal Sesuai Gambar)
+# 2. SUNTIKAN CSS PREMIUM (Kombinasi Warna 1F6F5F, 2FA084, 6FCF97)
 st.markdown("""
     <style>
     /* Background Global Modern */
@@ -102,63 +102,38 @@ st.markdown("""
         text-align: justify;
     }
 
-    /* KOTAK TIMBUL TEBAL PER PENYAKIT (GRID CARD STYLE) */
-    .disease-grid-container {
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-        margin-bottom: 30px;
-    }
-    
-    .disease-card {
+    /* KOTAK TIMBUL PANJANG KE BAWAH (VERTICAL CARD) */
+    .disease-full-card {
         background-color: #FFFFFF;
         border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(31, 111, 95, 0.12); /* Efek Bayangan Timbul Kuat */
+        box-shadow: 0 10px 25px rgba(31, 111, 95, 0.08); /* Bayangan Timbul */
         border: 1px solid #E2EFEA;
-        padding: 16px;
-        text-align: center;
+        padding: 20px;
+        margin-bottom: 35px; /* Jarak antar kotak ke bawah */
         transition: transform 0.3s ease, box-shadow 0.3s ease;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
     }
     
-    .disease-card:hover {
-        transform: translateY(-5px); /* Efek pop-up melayang */
-        box-shadow: 0 15px 35px rgba(31, 111, 95, 0.18);
-    }
-
-    /* Memaksa Foto Berukuran Landscape Seragam */
-    .landscape-img-container {
-        width: 100%;
-        height: 160px; /* Tinggi seragam untuk semua gambar */
-        border-radius: 12px;
-        overflow: hidden;
-        margin-bottom: 14px;
-    }
-    
-    .landscape-img-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* Memotong gambar menjadi landscape proporsional */
+    .disease-full-card:hover {
+        transform: translateY(-4px); /* Efek melayang saat kursor di atasnya */
+        box-shadow: 0 14px 30px rgba(31, 111, 95, 0.14);
     }
 
     .disease-card-title {
         color: #1F6F5F;
         font-weight: 700;
-        font-size: 1.15rem;
-        margin-bottom: 8px;
-        min-height: 45px; /* Menjaga teks judul tetap sejajar tinggiya */
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        font-size: 1.35rem;
+        margin-top: 15px;
+        margin-bottom: 10px;
+        border-left: 4px solid #2FA084;
+        padding-left: 10px;
     }
 
     .disease-card-desc {
-        color: #4A5D55;
-        font-size: 0.9rem;
-        line-height: 1.5;
+        color: #2F3E3A;
+        font-size: 1.02rem;
+        line-height: 1.6;
         text-align: justify;
+        padding-left: 14px;
     }
     
     /* Tombol Deteksi */
@@ -242,59 +217,58 @@ if model is not None:
         </p>
         """, unsafe_allow_html=True)
 
-        # 2. Jenis Penyakit Daun Kedelai (Bentuk Kotak Timbul Berjejer Ke Samping)
+        # 2. Jenis Penyakit Daun Kedelai (Kotak Timbul, Foto Landscape di Atas, Teks di Dalam Kotak)
         st.markdown('<div class="section-header">Jenis Penyakit Daun Kedelai</div>', unsafe_allow_html=True)
         
         diseases = [
             {
-                "title": "Karat Daun<br>(Soybean Rust)",
-                "desc": "Disebabkan oleh infeksi jamur patogen <i>Phakopsora pachyrhizi</i>. Gejala awal ditandai dengan munculnya bercak pustul kecil berwarna cokelat kelabu atau kemerahan di permukaan bawah daun.",
+                "title": "1. Karat Daun (Soybean Rust)",
+                "desc": "Disebabkan oleh infeksi jamur patogen <i>Phakopsora pachyrhizi</i>. Gejala awal ditandai dengan munculnya bercak pustul kecil berwarna cokelat kelabu atau kemerahan di permukaan bawah daun, mengakibatkan klorosis jaringan sekitar hingga daun gugur pra-matang.",
                 "filename": "karatdaun.jpg"
             },
             {
-                "title": "Pustul Bakteri<br>(Bacterial Pustule)",
-                "desc": "Disebabkan oleh bakteri <i>Xanthomonas axonopodis pv. glycines</i>. Karakteristik visual dicirikan bintik kecil kemerahan menonjol di tengah, dikelilingi oleh cincin kuning halus (halo).",
+                "title": "2. Pustul Bakteri (Bacterial Pustule)",
+                "desc": "Disebabkan oleh agen infeksi bakteri <i>Xanthomonas axonopodis pv. glycines</i>. Karakteristik visual dicirikan oleh bintik kecil berwarna kemerahan yang mengalami elevasi menonjol di bagian tengah, umumnya dikelilingi oleh cincin kuning halus (halo) di sekeliling area infeksi.",
                 "filename": "pustulbakteri.jpg"
             },
             {
-                "title": "Embun Bulu<br>(Downy Mildew)",
-                "desc": "Disebabkan oleh cendawan <i>Peronospora manshurica</i>. Permukaan atas daun memperlihatkan sebaran bercak kuning kelabu, sedangkan permukaan bawah tumbuh kumpulan konidia halus abu-abu.",
+                "title": "3. Embun Bulu (Downy Mildew)",
+                "desc": "Disebabkan oleh cendawan oomycete <i>Peronospora manshurica</i>. Permukaan atas helaian daun memperlihatkan sebaran bercak hijau pucat atau kuning kelabu, sedangkan pada area permukaan bawah daun ditumbuhi oleh kumpulan massa konidia halus berwarna abu-abu keunguan.",
                 "filename": "embunbulu.jpg"
             },
             {
-                "title": "Bercak Target<br>(Target Spot)",
-                "desc": "Disebabkan oleh jamur <i>Corynespora cassiicola</i>. Gejala ditandai dengan lesi cokelat melingkar berdiameter besar yang menampilkan pola lingkaran konsentris berlapis menyerupai sasaran tembak.",
+                "title": "4. Bercak Target (Target Spot)",
+                "desc": "Disebabkan oleh jamur nekrotrofik <i>Corynespora cassiicola</i>. Gejala ditandai dengan pembentukan lesi atau bercak cokelat melingkar berdiameter besar yang menampilkan pola struktur lingkaran konsentris berlapis menyerupai bentuk papan sasaran tembak.",
                 "filename": "bercaktarget.jpg"
             },
             {
-                "title": "Daun Sehat<br>(Healthy Leaf)",
-                "desc": "Kondisi kontrol pembanding dimana organ daun memiliki pigmen klorofil hijau merata yang homogen, bertekstur mulus, serta bersih sepenuhnya dari segala jenis infeksi patogen.",
+                "title": "5. Daun Sehat (Healthy Leaf)",
+                "desc": "Kondisi kontrol pembanding dimana organ daun memiliki pigmen klorofil hijau merata yang homogen, bertekstur mulus, serta bersih sepenuhnya dari segala jenis bentuk nekrosis, klorosis, maupun degradasi akibat serangan organisme pengganggu tanaman.",
                 "filename": "healthy.jpg"
             }
         ]
 
-        # Membuat susunan 5 Kolom sejajar ke samping secara otomatis
-        cols = st.columns(5, gap="medium")
-        
-        for index, d in enumerate(diseases):
-            with cols[index]:
-                # Cek ketersediaan gambar lokal
+        # Loop berjejer ke bawah
+        for d in diseases:
+            # Membuka pembungkus kotak timbul utuh
+            st.markdown('<div class="disease-full-card">', unsafe_allow_html=True)
+            
+            # Agar foto landscape-nya proporsional di halaman lebar, kita buat layout kolom internal
+            # Kolom tengah sengaja dibuat dominan agar foto landscape kamu meluas sempurna
+            col_left, col_center, col_right = st.columns([0.1, 2.5, 0.1])
+            with col_center:
                 if os.path.exists(d["filename"]):
-                    img_elem = f'<img src="data:image/jpeg;base64,...">' # Placeholder logic handeled cleanly by streamlit layout below
-                    
-                    # Trik membungkus elemen Streamlit Image ke dalam Custom CSS Landscape Card Container
-                    st.markdown(f'<div class="disease-card">', unsafe_allow_html=True)
+                    # Streamlit mendeteksi otomatis jika gambar landscape diset lebar penuh
                     st.image(d["filename"], use_container_width=True)
-                    st.markdown(f'<div class="disease-card-title">{d["title"]}</div>', unsafe_allow_html=True)
-                    st.markdown(f'<div class="disease-card-desc">{d["desc"]}</div>', unsafe_allow_html=True)
-                    st.markdown('</div>', unsafe_allow_html=True)
                 else:
-                    # Tampilan Fallback jika gambar belum dipindah ke folder aplikasi
-                    st.markdown(f'<div class="disease-card">', unsafe_allow_html=True)
-                    st.error(f"File '{d['filename']}' tidak ditemukan.")
-                    st.markdown(f'<div class="disease-card-title">{d["title"]}</div>', unsafe_allow_html=True)
-                    st.markdown(f'<div class="disease-card-desc">{d["desc"]}</div>', unsafe_allow_html=True)
-                    st.markdown('</div>', unsafe_allow_html=True)
+                    st.error(f"Berkas gambar '{d['filename']}' belum ada di folder utama.")
+            
+            # Judul dan Penjelasan dimasukkan ke dalam kotak yang sama (di bawah foto)
+            st.markdown(f'<div class="disease-card-title">{d["title"]}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="disease-card-desc">{d["desc"]}</div>', unsafe_allow_html=True)
+            
+            # Menutup kotak timbul
+            st.markdown('</div>', unsafe_allow_html=True)
 
     # ==================== TAB 2: DETEKSI UPLOAD ====================
     with tab_upload:
