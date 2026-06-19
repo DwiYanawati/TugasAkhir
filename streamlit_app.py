@@ -8,7 +8,7 @@ from streamlit_webrtc import webrtc_streamer, VideoTransformerBase, RTCConfigura
 
 # 1. SET CONFIG UTAMA
 st.set_page_config(
-    page_title="SoyLeaf-Guard | UII",
+    page_title="SoyLeaf-Guard",
     page_icon="🌿",
     layout="wide",
     initial_sidebar_state="collapsed" 
@@ -257,7 +257,6 @@ if model is not None:
         st.markdown('<p class="hero-sub">Sistem Identifikasi Dini Penyakit Daun Kedelai</p>', unsafe_allow_html=True)
         
         # 1. Teks Penjelasan Awal Secara Garis Besar
-        st.markdown('<div class="bg-skripsi-box" style="margin-top: 20px;">', unsafe_allow_html=True)
         st.markdown("""
         <p class="info-text">
         Kedelai (<i>Glycine max L.</i>) merupakan tanaman kacang-kacangan kaya nutrisi yang berfungsi sebagai sumber protein nabati utama bagi masyarakat, 
@@ -274,8 +273,6 @@ if model is not None:
         st.markdown('</div>', unsafe_allow_html=True)
 
         # 2. Jenis Penyakit Daun Kedelai (Layout Gambar Kecil di Samping Teks)
-        st.markdown('<div class="section-header">Jenis Penyakit Daun Kedelai</div>', unsafe_allow_html=True)
-        
         diseases = [
             {
                 "title": "1. Karat Daun (Soybean Rust)",
@@ -330,7 +327,7 @@ if model is not None:
         # SATU KOTAK UTUH LANGKAH PENGGUNAAN UPLOAD (Sudah Diperbaiki tanpa Indentasi Bermasalah)
         st.markdown('<div class="single-step-box"><div class="step-title-text">📋 Langkah Penggunaan:</div><ul class="step-list"><li><b>Unggah Citra Daun:</b> Klik area berkas di bawah untuk memasukkan foto daun kedelai (Format: JPG, JPEG, atau PNG).</li><li><b>Jalankan Inferensi:</b> Klik tombol hijau <b>"Deteksi Penyakit Daun Kedelai"</b> untuk memicu pemindaian model kecerdasan buatan YOLOv9.</li><li><b>Evaluasi Prediksi:</b> Tinjau area kanan untuk melihat hasil lokalisasi bercak serta akurasi presentase (Confidence Score).</li></ul></div>', unsafe_allow_html=True)
             
-        uploaded_file = st.file_uploader("Pilih file gambar daun kedelai:", type=["jpg", "jpeg", "png"])
+        uploaded_file = st.file_uploader("Pilih file gambar daun kedelai:", type=["jpg", "png"])
         
         if uploaded_file is not None:
             image = Image.open(uploaded_file)
