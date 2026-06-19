@@ -238,7 +238,7 @@ class YoloVideoTransformer(VideoTransformerBase):
     def __init__(self): self.model = model
     def transform(self, frame):
         img = frame.to_ndarray(format="bgr24")
-        # PERBAIKAN 1: Mengaktifkan boxes=True agar kotak deteksi muncul pada live cam
+        # Ditambahkan Bounding Box (boxes=True)
         return self.model(img, conf=0.25)[0].plot(boxes=True)
 
 
@@ -248,6 +248,7 @@ if model is not None:
         st.markdown('<h1 class="hero-title">🌿SoyLeaf-Guard</h1>', unsafe_allow_html=True)
         st.markdown('<p class="hero-sub">Sistem Identifikasi Dini Penyakit Daun Kedelai</p>', unsafe_allow_html=True)
         
+        # 1. Teks Penjelasan Awal Secara Garis Besar
         st.markdown("""
         <p class="info-text">
         Kedelai (<i>Glycine max L.</i>) merupakan tanaman kacang-kacangan kaya nutrisi yang berfungsi sebagai sumber protein nabati utama bagi masyarakat, 
@@ -262,19 +263,43 @@ if model is not None:
         </p>
         """, unsafe_allow_html=True)
 
+        # ====== SELESAI PENJELASAN AWAL: DI SINI JUDUL BARU DITAMBAHKAN ======
         st.markdown('<div class="section-header">Jenis Penyakit Daun Kedelai</div>', unsafe_allow_html=True)
 
+        # 2. Jenis Penyakit Daun Kedelai (Layout Gambar Kecil di Samping Teks)
         diseases = [
-            {"title": "1. Karat Daun (Soybean Rust)", "desc": "Disebabkan oleh infeksi jamur patogen Phakopsora pachyrhizi...", "filename": "karatdaun.jpg"},
-            {"title": "2. Pustul Bakteri (Bacterial Pustule)", "desc": "Disebabkan oleh agen infeksi bakteri Xanthomonas axonopodis...", "filename": "pustulbakteri.jpg"},
-            {"title": "3. Embun Bulu (Downy Mildew)", "desc": "Disebabkan oleh cendawan oomycete Peronospora manshurica...", "filename": "embunbulu.jpg"},
-            {"title": "4. Bercak Target (Target Spot)", "desc": "Disebabkan oleh jamur nekrotrofik Corynespora cassiicola...", "filename": "bercaktarget.jpg"},
-            {"title": "5. Daun Sehat (Healthy Leaf)", "desc": "Kondisi kontrol pembanding dimana organ daun memiliki pigmen klorofil hijau merata...", "filename": "healthy.jpg"}
+            {
+                "title": "1. Karat Daun (Soybean Rust)",
+                "desc": "Disebabkan oleh infeksi jamur patogen Phakopsora pachyrhizi. Gejala awal ditandai dengan munculnya bercak pustul kecil berwarna cokelat kelabu atau kemerahan di permukaan bawah daun, mengakibatkan klorosis jaringan sekitar hingga daun gugur pra-matang.",
+                "filename": "karatdaun.jpg"
+            },
+            {
+                "title": "2. Pustul Bakteri (Bacterial Pustule)",
+                "desc": "Disebabkan oleh agen infeksi bakteri Xanthomonas axonopodis pv. glycines. Karakteristik visual dicirikan oleh bintik kecil berwarna kemerahan yang mengalami elevasi menonjol di bagian tengah, umumnya dikelilingi oleh cincin kuning halus (halo) di sekeliling area infeksi.",
+                "filename": "pustulbakteri.jpg"
+            },
+            {
+                "title": "3. Embun Bulu (Downy Mildew)",
+                "desc": "Disebabkan oleh cendawan oomycete Peronospora manshurica. Permukaan atas helaian daun memperlihatkan sebaran bercak hijau pucat atau kuning kelabu, sedangkan pada area permukaan bawah daun ditumbuhi oleh kumpulan massa konidia halus berwarna abu-abu keunguan.",
+                "filename": "embunbulu.jpg"
+            },
+            {
+                "title": "4. Bercak Target (Target Spot)",
+                "desc": "Disebabkan oleh jamur nekrotrofik Corynespora cassiicola. Gejala ditandai dengan pembentukan lesi atau bercak cokelat melingkar berdiameter besar yang menampilkan pola struktur lingkaran konsentris berlapis menyerupai bentuk papan sasaran tembak.",
+                "filename": "bercaktarget.jpg"
+            },
+            {
+                "title": "5. Daun Sehat (Healthy Leaf)",
+                "desc": "Kondisi kontrol pembanding dimana organ daun memiliki pigmen klorofil hijau merata yang homogen, bertekstur mulus, serta bersih sepenuhnya dari segala jenis bentuk nekrosis, klorosis, maupun degradasi akibat serangan organisme pengganggu tanaman.",
+                "filename": "healthy.jpg"
+            }
         ]
 
+        # Loop Penyakit Berjejer ke Bawah dengan Gambar di Samping Kiri
         for d in diseases:
             st.markdown('<div class="disease-vertical-box">', unsafe_allow_html=True)
             inner_col1, inner_col2 = st.columns([1, 4])
+            
             with inner_col1:
                 st.markdown('<div class="image-landscape-wrapper">', unsafe_allow_html=True)
                 if os.path.exists(d["filename"]):
@@ -282,15 +307,17 @@ if model is not None:
                 else:
                     st.error("No Image")
                 st.markdown('</div>', unsafe_allow_html=True)
+                
             with inner_col2:
                 st.markdown(f'<div class="disease-box-title">{d["title"]}</div>', unsafe_allow_html=True)
                 st.markdown(f'<div class="disease-box-desc">{d["desc"]}</div>', unsafe_allow_html=True)
+                
             st.markdown('</div>', unsafe_allow_html=True)
 
     # ==================== TAB 2: DETEKSI UPLOAD ====================
     with tab_upload:
         st.markdown('<div class="section-header">Deteksi Upload Gambar</div>', unsafe_allow_html=True)
-        st.markdown('<div class="single-step-box"><div class="step-title-text">Langkah Penggunaan:</div><ul class="step-list"><li><b>Unggah Citra Daun:</b> Masukkan foto daun kedelai.</li><li><b>Jalankan Inferensi:</b> Klik tombol hijau.</li><li><b>Evaluasi Prediksi:</b> Tinjau area kanan.</li></ul></div>', unsafe_allow_html=True)
+        st.markdown('<div class="single-step-box"><div class="step-title-text">Langkah Penggunaan:</div><ul class="step-list"><li><b>Unggah Citra Daun:</b> Klik area berkas di bawah untuk memasukkan foto daun kedelai (Format: JPG, PNG).</li><li><b>Jalankan Inferensi:</b> Klik tombol hijau <b>"Deteksi Penyakit Daun Kedelai"</b> untuk memicu pemindaian model kecerdasan buatan YOLOv9.</li><li><b>Evaluasi Prediksi:</b> Tinjau area kanan untuk melihat hasil lokalisasi bercak serta akurasi presentase (Confidence Score).</li></ul></div>', unsafe_allow_html=True)
             
         uploaded_file = st.file_uploader("Pilih file gambar daun kedelai:", type=["jpg", "png"])
         
@@ -309,7 +336,7 @@ if model is not None:
                     img_array = np.array(image)
                     img_bgr = cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR)
                     results = model(img_bgr)
-                    # PERBAIKAN 2: Mengubah boxes=False menjadi boxes=True di fungsi plot()
+                    # Ditambahkan Bounding Box (boxes=True)
                     result_img = results[0].plot(boxes=True)
                     result_img_rgb = cv2.cvtColor(result_img, cv2.COLOR_BGR2RGB)
                     st.image(result_img_rgb, use_container_width=True)
@@ -334,7 +361,7 @@ if model is not None:
     # ==================== TAB 3: DETEKSI REAL-TIME ====================
     with tab_realtime:
         st.markdown('<div class="section-header">Deteksi Kamera Real-Time</div>', unsafe_allow_html=True)
-        st.markdown('<div class="single-step-box"><div class="step-title-text">Langkah Penggunaan:</div><ul class="step-list"><li><b>Izinkan Akses Perangkat.</b></li><li><b>Mulai Deteksi.</b></li><li><b>Deteksi Otomatis.</b></li></ul></div>', unsafe_allow_html=True)
+        st.markdown('<div class="single-step-box"><div class="step-title-text">Langkah Penggunaan:</div><ul class="step-list"><li><b>Izinkan Akses Perangkat:</b> Pastikan browser diberikan izin penuh untuk mengakses hardware webcam laptop Anda.</li><li><b>Mulai Deteksi:</b> Tekan tombol <b>"START"</b> pada jendela pemutar WebRTC untuk mengaktifkan pemindaian video langsung.</li><li><b>Deteksi Otomatis:</b> Hadapkan sisi fisik daun kedelai secara sejajar di depan lensa kamera hingga deteksi otomatis muncul tanpa kotak pembatas.</li></ul></div>', unsafe_allow_html=True)
             
         col_cam1, col_cam2 = st.columns([2, 1], gap="large")
         with col_cam1:
@@ -348,7 +375,10 @@ if model is not None:
             
         with col_cam2:
             st.subheader("Catatan Teknis Stabilitas")
-            st.caption("- Pastikan jarak objek daun tidak terlalu dekat agar piksel warna tidak mengalami distorsi blur.")
+            st.caption("""
+            - Akurasi deteksi objek real-time sangat bergantung pada kondisi pencahayaan ruangan dan kestabilan fokus lensa.
+            - Pastikan jarak objek daun tidak terlalu dekat agar piksel warna tidak mengalami distorsi blur.
+            """)
 
 else:
     st.error("Gagal menginisialisasi file bobot model 'best.pt'.")
