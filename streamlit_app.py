@@ -14,7 +14,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed" 
 )
 
-# 2. SUNTIKAN CSS PREMIUM (Kombinasi Warna Modern & Kotak Timbul Tebal Sesuai Gambar)
+# 2. SUNTIKAN CSS PREMIUM (Kombinasi Warna Modern & Pembatasan Gambar Supaya Tidak Kegedean)
 st.markdown("""
     <style>
     /* Background Global Modern */
@@ -102,66 +102,79 @@ st.markdown("""
         text-align: justify;
     }
 
-    /* KOTAK TIMBUL TEBAL PER PENYAKIT (GRID CARD STYLE) */
-    .disease-grid-container {
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-        margin-bottom: 30px;
-    }
-    
-    .disease-card {
+    /* KOTAK TIMBUL PER PENYAKIT (VERTIKAL KE BAWAH) */
+    .disease-vertical-box {
         background-color: #FFFFFF;
         border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(31, 111, 95, 0.12); /* Efek Bayangan Timbul Kuat */
+        box-shadow: 0 10px 25px rgba(31, 111, 95, 0.08);
         border: 1px solid #E2EFEA;
-        padding: 16px;
+        padding: 24px;
+        margin-bottom: 35px;
         text-align: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
+        transition: transform 0.3s ease;
     }
     
-    .disease-card:hover {
-        transform: translateY(-5px); /* Efek pop-up melayang */
-        box-shadow: 0 15px 35px rgba(31, 111, 95, 0.18);
+    .disease-vertical-box:hover {
+        transform: translateY(-3px);
     }
 
-    /* Memaksa Foto Berukuran Landscape Seragam */
-    .landscape-img-container {
-        width: 100%;
-        height: 160px; /* Tinggi seragam untuk semua gambar */
+    /* WADAH FOTO LANDSCAPE SERAGAM - TIDAK KEGEDEAN */
+    .image-landscape-wrapper {
+        max-width: 480px; /* Membatasi lebar gambar biar ga kegedean jir */
+        height: 270px;    /* Mengunci tinggi gambar proporsional 16:9 */
+        margin: 0 auto 20px auto; /* Ketengah dan beri jarak ke bawah */
         border-radius: 12px;
         overflow: hidden;
-        margin-bottom: 14px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        border: 2px solid #EEF5F2;
     }
     
-    .landscape-img-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* Memotong gambar menjadi landscape proporsional */
+    .image-landscape-wrapper img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important; /* Potong gambar otomatis biar ga gepeng */
     }
 
-    .disease-card-title {
+    .disease-box-title {
         color: #1F6F5F;
         font-weight: 700;
-        font-size: 1.15rem;
-        margin-bottom: 8px;
-        min-height: 45px; /* Menjaga teks judul tetap sejajar tinggiya */
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        font-size: 1.35rem;
+        margin-bottom: 12px;
     }
 
-    .disease-card-desc {
-        color: #4A5D55;
-        font-size: 0.9rem;
-        line-height: 1.5;
+    .disease-box-desc {
+        color: #2F3E3A;
+        font-size: 1rem;
+        line-height: 1.6;
         text-align: justify;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 10px 15px;
+        background-color: #FAFCFB;
+        border-radius: 8px;
     }
     
-    /* Tombol Deteksi */
+    /* GAYA VISUAL LANGKAH PENGGUNAAN (STEP BOX) */
+    .step-container {
+        background-color: #FFFFFF;
+        border-radius: 12px;
+        padding: 18px;
+        border: 1px solid #E2EFEA;
+        border-left: 4px solid #1F6F5F;
+        margin-bottom: 25px;
+    }
+    
+    .step-title {
+        color: #1F6F5F;
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    /* Tombol Eksekusi */
     div.stButton > button:first-child {
         background-color: #2FA084 !important;
         color: white !important;
@@ -242,64 +255,70 @@ if model is not None:
         </p>
         """, unsafe_allow_html=True)
 
-        # 2. Jenis Penyakit Daun Kedelai (Bentuk Kotak Timbul Berjejer Ke Samping)
+        # 2. Jenis Penyakit Daun Kedelai (Kotak Timbul, Foto Landscape Terkontrol, Teks Masuk Kotak)
         st.markdown('<div class="section-header">Jenis Penyakit Daun Kedelai</div>', unsafe_allow_html=True)
         
         diseases = [
             {
-                "title": "Karat Daun<br>(Soybean Rust)",
-                "desc": "Disebabkan oleh infeksi jamur patogen <i>Phakopsora pachyrhizi</i>. Gejala awal ditandai dengan munculnya bercak pustul kecil berwarna cokelat kelabu atau kemerahan di permukaan bawah daun.",
+                "title": "1. Karat Daun (Soybean Rust)",
+                "desc": "Disebabkan oleh infeksi jamur patogen Phakopsora pachyrhizi. Gejala awal ditandai dengan munculnya bercak pustul kecil berwarna cokelat kelabu atau kemerahan di permukaan bawah daun, mengakibatkan klorosis jaringan sekitar hingga daun gugur pra-matang.",
                 "filename": "karatdaun.jpg"
             },
             {
-                "title": "Pustul Bakteri<br>(Bacterial Pustule)",
-                "desc": "Disebabkan oleh bakteri <i>Xanthomonas axonopodis pv. glycines</i>. Karakteristik visual dicirikan bintik kecil kemerahan menonjol di tengah, dikelilingi oleh cincin kuning halus (halo).",
+                "title": "2. Pustul Bakteri (Bacterial Pustule)",
+                "desc": "Disebabkan oleh agen infeksi bakteri Xanthomonas axonopodis pv. glycines. Karakteristik visual dicirikan oleh bintik kecil berwarna kemerahan yang mengalami elevasi menonjol di bagian tengah, umumnya dikelilingi oleh cincin kuning halus (halo) di sekeliling area infeksi.",
                 "filename": "pustulbakteri.jpg"
             },
             {
-                "title": "Embun Bulu<br>(Downy Mildew)",
-                "desc": "Disebabkan oleh cendawan <i>Peronospora manshurica</i>. Permukaan atas daun memperlihatkan sebaran bercak kuning kelabu, sedangkan permukaan bawah tumbuh kumpulan konidia halus abu-abu.",
+                "title": "3. Embun Bulu (Downy Mildew)",
+                "desc": "Disebabkan oleh cendawan oomycete Peronospora manshurica. Permukaan atas helaian daun memperlihatkan sebaran bercak hijau pucat atau kuning kelabu, sedangkan pada area permukaan bawah daun ditumbuhi oleh kumpulan massa konidia halus berwarna abu-abu keunguan.",
                 "filename": "embunbulu.jpg"
             },
             {
-                "title": "Bercak Target<br>(Target Spot)",
-                "desc": "Disebabkan oleh jamur <i>Corynespora cassiicola</i>. Gejala ditandai dengan lesi cokelat melingkar berdiameter besar yang menampilkan pola lingkaran konsentris berlapis menyerupai sasaran tembak.",
+                "title": "4. Bercak Target (Target Spot)",
+                "desc": "Disebabkan oleh jamur nekrotrofik Corynespora cassiicola. Gejala ditandai dengan pembentukan lesi atau bercak cokelat melingkar berdiameter besar yang menampilkan pola struktur lingkaran konsentris berlapis menyerupai bentuk papan sasaran tembak.",
                 "filename": "bercaktarget.jpg"
             },
             {
-                "title": "Daun Sehat<br>(Healthy Leaf)",
-                "desc": "Kondisi kontrol pembanding dimana organ daun memiliki pigmen klorofil hijau merata yang homogen, bertekstur mulus, serta bersih sepenuhnya dari segala jenis infeksi patogen.",
+                "title": "5. Daun Sehat (Healthy Leaf)",
+                "desc": "Kondisi kontrol pembanding dimana organ daun memiliki pigmen klorofil hijau merata yang homogen, bertekstur mulus, serta bersih sepenuhnya dari segala jenis bentuk nekrosis, klorosis, maupun degradasi akibat serangan organisme pengganggu tanaman.",
                 "filename": "healthy.jpg"
             }
         ]
 
-        # Membuat susunan 5 Kolom sejajar ke samping secara otomatis
-        cols = st.columns(5, gap="medium")
-        
-        for index, d in enumerate(diseases):
-            with cols[index]:
-                # Cek ketersediaan gambar lokal
-                if os.path.exists(d["filename"]):
-                    img_elem = f'<img src="data:image/jpeg;base64,...">' # Placeholder logic handeled cleanly by streamlit layout below
-                    
-                    # Trik membungkus elemen Streamlit Image ke dalam Custom CSS Landscape Card Container
-                    st.markdown(f'<div class="disease-card">', unsafe_allow_html=True)
-                    st.image(d["filename"], use_container_width=True)
-                    st.markdown(f'<div class="disease-card-title">{d["title"]}</div>', unsafe_allow_html=True)
-                    st.markdown(f'<div class="disease-card-desc">{d["desc"]}</div>', unsafe_allow_html=True)
-                    st.markdown('</div>', unsafe_allow_html=True)
-                else:
-                    # Tampilan Fallback jika gambar belum dipindah ke folder aplikasi
-                    st.markdown(f'<div class="disease-card">', unsafe_allow_html=True)
-                    st.error(f"File '{d['filename']}' tidak ditemukan.")
-                    st.markdown(f'<div class="disease-card-title">{d["title"]}</div>', unsafe_allow_html=True)
-                    st.markdown(f'<div class="disease-card-desc">{d["desc"]}</div>', unsafe_allow_html=True)
-                    st.markdown('</div>', unsafe_allow_html=True)
+        # Loop Berjejer ke Bawah secara Bersih
+        for d in diseases:
+            st.markdown('<div class="disease-vertical-box">', unsafe_allow_html=True)
+            
+            # Membungkus gambar kedalam wrapper CSS pembatas ukuran
+            st.markdown('<div class="image-landscape-wrapper">', unsafe_allow_html=True)
+            if os.path.exists(d["filename"]):
+                st.image(d["filename"], use_container_width=True)
+            else:
+                st.error(f"File '{d['filename']}' tidak ditemukan.")
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+            # Teks Judul dan Deskripsi Berada di dalam kotak yang sama
+            st.markdown(f'<div class="disease-box-title">{d["title"]}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="disease-box-desc">{d["desc"]}</div>', unsafe_allow_html=True)
+            
+            st.markdown('</div>', unsafe_allow_html=True)
 
     # ==================== TAB 2: DETEKSI UPLOAD ====================
     with tab_upload:
         st.markdown('<div class="section-header">Deteksi via File Gambar</div>', unsafe_allow_html=True)
-        uploaded_file = st.file_uploader("Unggah file gambar daun kedelai:", type=["jpg", "jpeg", "png"])
+        
+        # Penambahan Panduan Langkah Penggunaan Berjejer Samping (3 Kolom)
+        st.markdown('<div class="step-title">📋 Langkah-Langkah Penggunaan Panduan Analisis:</div>', unsafe_allow_html=True)
+        step_cols = st.columns(3)
+        with step_cols[0]:
+            st.markdown('<div class="step-container"><b>1. Unggah Citra Daun</b><br><span style="font-size:0.85rem; color:#555;">Klik area drag-and-drop di bawah untuk memasukkan file foto daun kedelai (Format PNG/JPG/JPEG).</span></div>', unsafe_allow_html=True)
+        with step_cols[1]:
+            st.markdown('<div class="step-container"><b>2. Jalankan Inferensi</b><br><span style="font-size:0.85rem; color:#555;">Klik tombol hijau "Jalankan Analisis Objek" untuk memicu pemindaian koordinat model YOLOv9.</span></div>', unsafe_allow_html=True)
+        with step_cols[2]:
+            st.markdown('<div class="step-container"><b>3. Evaluasi Prediksi</b><br><span style="font-size:0.85rem; color:#555;">Sistem memunculkan kotak lokalisasi (*bounding box*) dan nilai tingkat akurasi presentase patogen.</span></div>', unsafe_allow_html=True)
+            
+        uploaded_file = st.file_uploader("Pilih file gambar daun kedelai:", type=["jpg", "jpeg", "png"])
         
         if uploaded_file is not None:
             image = Image.open(uploaded_file)
@@ -341,6 +360,16 @@ if model is not None:
     with tab_realtime:
         st.markdown('<div class="section-header">Deteksi Kamera Real-Time</div>', unsafe_allow_html=True)
         
+        # Penambahan Panduan Langkah Penggunaan Real-Time
+        st.markdown('<div class="step-title">📋 Langkah-Langkah Penggunaan Deteksi Kamera:</div>', unsafe_allow_html=True)
+        step_cam_cols = st.columns(3)
+        with step_cam_cols[0]:
+            st.markdown('<div class="step-container"><b>1. Izinkan Akses Kamera</b><br><span style="font-size:0.85rem; color:#555;">Berikan izin browser untuk mengakses modul hardware kamera laptop / webcam eksternal Anda.</span></div>', unsafe_allow_html=True)
+        with step_cam_cols[1]:
+            st.markdown('<div class="step-container"><b>2. Jalankan Tombol Start</b><br><span style="font-size:0.85rem; color:#555;">Klik tombol "START" pada jendela WebRTC untuk mengaktifkan pemindaian streaming video beruntun.</span></div>', unsafe_allow_html=True)
+        with step_cam_cols[2]:
+            st.markdown('<div class="step-container"><b>3. Dekatkan Daun</b><br><span style="font-size:0.85rem; color:#555;">Arahkan sampel fisik daun kedelai ke depan lensa kamera. Model akan melakukan inferensi otomatis.</span></div>', unsafe_allow_html=True)
+            
         col_cam1, col_cam2 = st.columns([2, 1], gap="large")
         with col_cam1:
             st.subheader("Aliran Video WebRTC")
@@ -352,11 +381,10 @@ if model is not None:
             )
             
         with col_cam2:
-            st.subheader("Panduan Teknis")
+            st.subheader("Catatan Teknis Stabilitas")
             st.caption("""
-            - Aktifkan fungsi kamera dengan menekan tombol START.
-            - Posisikan sampel daun kedelai secara sejajar di depan lensa.
-            - Akurasi inferensi real-time dipengaruhi oleh stabilitas perangkat dan intensitas cahaya sekitar.
+            - Akurasi deteksi objek *real-time* sangat bergantung pada kondisi pencahayaan ruangan dan kestabilan fokus lensa.
+            - Pastikan jarak objek daun tidak terlalu dekat agar piksel warna tidak mengalami distorsi *blur*.
             """)
 
 else:
